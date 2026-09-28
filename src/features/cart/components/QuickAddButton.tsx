@@ -1,24 +1,49 @@
 "use client";
 
 import { useActionState } from "react";
-import { IconButton } from "@/components/ui";
+import { Button, Icon, IconButton } from "@/components/ui";
 import { addToCart } from "../actions";
 import s from "./QuickAddButton.module.scss";
 
-/** The "+" on product cards. Works without JS (plain form post), enhanced with pending state. */
-export function QuickAddButton({ sku, productName }: { sku: string; productName: string }) {
+/**
+ * The quick "+" add-to-bag on cards and search rows. Works without JS (plain form post), enhanced with pending state.
+ * `icon`: square "+" (cards). `text`: labeled "+ Add" (search rows, where there is room for a word).
+ */
+export function QuickAddButton({
+  sku,
+  productName,
+  variant = "icon",
+}: {
+  sku: string;
+  productName: string;
+  variant?: "icon" | "text";
+}) {
   const [state, action, pending] = useActionState(addToCart, null);
+  const icon = state?.ok ? "check" : "plus";
 
   return (
     <form action={action} className={s.form}>
       <input type="hidden" name="sku" value={sku} />
-      <IconButton
-        type="submit"
-        icon={state?.ok ? "check" : "plus"}
-        label={`Add ${productName} to bag`}
-        disabled={pending}
-        className={s.button}
-      />
+      {variant === "icon" ? (
+        <IconButton
+          type="submit"
+          icon={icon}
+          label={`Add ${productName} to bag`}
+          disabled={pending}
+          className={s.button}
+        />
+      ) : (
+        <Button
+          type="submit"
+          size="md"
+          loading={pending}
+          iconStart={<Icon name={icon} size={18} />}
+          aria-label={`Add ${productName} to bag`}
+          className={s.textButton}
+        >
+          {state?.ok ? "Added" : "Add"}
+        </Button>
+      )}
       <span className="visually-hidden" role="status">
         {state?.message}
       </span>

@@ -17,3 +17,16 @@
     }
   }
 }
+
+// Labeled gold button in search result rows (design: "+ Vault").
+.form .textButton {
+  min-height: var(--tap-min);
+  background: var(--color-gold-text);
+  color: var(--color-accent-contrast);
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background: var(--color-text);
+    }
+  }
+}

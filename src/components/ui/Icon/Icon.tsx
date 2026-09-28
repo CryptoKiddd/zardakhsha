@@ -43,6 +43,18 @@ const paths = {
   chevronDown: <path d="m6 9 6 6 6-6" />,
   chevronRight: <path d="m9 6 6 6-6 6" />,
   arrowRight: <path d="M4 12h16m-6-6 6 6-6 6" />,
+  clock: (
+    <>
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5V12l3 2" />
+    </>
+  ),
+  trend: (
+    <>
+      <path d="m3.5 17 6-6 4 4 7-7.5" />
+      <path d="M15 7.5h5.5V13" />
+    </>
+  ),
   mail: (
     <>
       <rect x="3.5" y="5.5" width="17" height="13" rx="1.5" />
