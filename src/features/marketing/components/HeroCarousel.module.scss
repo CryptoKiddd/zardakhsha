@@ -55,7 +55,7 @@ $slide-ms: 6500ms;
     right: -18%;
     width: min(70vw, 26rem);
     aspect-ratio: 1;
-    border: 1px solid rgb(201 164 92 / 0.55);
+    border: 1px solid color-mix(in srgb, var(--color-gold) 55%, transparent);
     border-radius: 50%;
   }
 
@@ -170,7 +170,7 @@ $slide-ms: 6500ms;
     top: 18%;
     right: 8%;
     width: min(40vw, 14rem);
-    outline: 1px solid rgb(201 164 92 / 0.3);
+    outline: 1px solid color-mix(in srgb, var(--color-gold) 30%, transparent);
     outline-offset: 14px;
   }
 
@@ -186,7 +186,7 @@ $slide-ms: 6500ms;
     right: -30%;
     width: min(90vw, 34rem);
     border-style: dashed;
-    border-color: rgb(201 164 92 / 0.4);
+    border-color: color-mix(in srgb, var(--color-gold) 40%, transparent);
   }
 
   &::after {
