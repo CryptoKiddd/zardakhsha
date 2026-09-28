@@ -102,7 +102,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/search">)
 async function Results({ q, category }: { q: string; category?: CategorySlug }) {
   const products = await searchProducts(q, { category });
   return (
-    <ViewTransition enter="search-results" default="none">
+    <ViewTransition enter="results-in" default="none">
       <ResultsFrame q={q} count={products.length}>
         {products.length > 0 ? (
           <SearchResultList products={products} />

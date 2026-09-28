@@ -28,9 +28,15 @@
       vt-blur-out 420ms ease-in forwards;
   }
 
-  // Live search: fresh results rise into place instead of popping in.
-  ::view-transition-new(.search-results) {
+  // Search and listings: fresh results rise into place instead of popping in.
+  ::view-transition-new(.results-in) {
     animation: vt-rise 450ms var(--ease-out) both;
+  }
+
+  // Category tabs: the gold underline glides to the new tab (shared element between the two pages).
+  ::view-transition-group(.indicator-glide) {
+    animation-duration: 420ms;
+    animation-timing-function: var(--ease-out);
   }
 }
 

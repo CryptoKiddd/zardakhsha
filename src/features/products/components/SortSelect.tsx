@@ -3,17 +3,12 @@
 import type { Route } from "next";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
+import { Icon } from "@/components/ui";
+import { SORT_OPTIONS } from "../listing";
 import type { SortKey } from "../types";
-import s from "./ListingToolbar.module.scss";
+import s from "./Filters.module.scss";
 
-const OPTIONS: { value: SortKey; label: string }[] = [
-  { value: "featured", label: "Featured" },
-  { value: "newest", label: "Newest" },
-  { value: "price-asc", label: "Price: low to high" },
-  { value: "price-desc", label: "Price: high to low" },
-  { value: "rating", label: "Top rated" },
-];
-
+/** Compact "Sort: Featured ▾". Native <select> so phones get their own picker. */
 export function SortSelect({ value }: { value: SortKey }) {
   const router = useRouter();
   const pathname = usePathname();
@@ -23,22 +18,24 @@ export function SortSelect({ value }: { value: SortKey }) {
 
   return (
     <label className={s.sort} data-pending={pending || undefined}>
-      <span className="visually-hidden">Sort by</span>
+      <span className={s.sortLabel}>Sort:</span>
       <select
         value={value}
         onChange={(e) => {
           const next = new URLSearchParams(params);
           if (e.target.value === "featured") next.delete("sort");
           else next.set("sort", e.target.value);
-          startTransition(() => router.replace(`${pathname}?${next}` as Route, { scroll: false }));
+          const query = next.toString();
+          startTransition(() => router.replace(`${pathname}${query ? `?${query}` : ""}` as Route, { scroll: false }));
         }}
       >
-        {OPTIONS.map((o) => (
+        {SORT_OPTIONS.map((o) => (
           <option key={o.value} value={o.value}>
             {o.label}
           </option>
         ))}
       </select>
+      <Icon name="chevronDown" size={16} className={s.sortChevron} />
     </label>
   );
 }

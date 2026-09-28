@@ -44,6 +44,13 @@ const paths = {
   chevronRight: <path d="m9 6 6 6-6 6" />,
   arrowRight: <path d="M4 12h16m-6-6 6 6-6 6" />,
   pause: <path d="M9 6v12M15 6v12" />,
+  sliders: (
+    <>
+      <path d="M4 7h9M17 7h3M4 17h3M11 17h9" />
+      <circle cx="15" cy="7" r="2" />
+      <circle cx="9" cy="17" r="2" />
+    </>
+  ),
   play: <path d="M8 5.5v13l10.5-6.5z" />,
   trash: (
     <>

@@ -4,6 +4,7 @@ import type { SortOrder } from "mongoose";
 import { readDb } from "@/lib/db";
 import { Product, type ProductDoc } from "@/models";
 import { CATEGORIES, type CategorySlug } from "@/config/navigation";
+import { priceBounds, type ListingState } from "./listing";
 import { toProductCard, toProductDetail } from "./mappers";
 import type { ProductCardDTO, ProductDetailDTO, SortKey } from "./types";
 
@@ -24,12 +25,7 @@ function filterForSlug(slug: string): Record<string, unknown> | null {
   return null;
 }
 
-export type ListingParams = {
-  slug: string;
-  sort?: SortKey;
-  metal?: "silver" | "gold";
-  maxPrice?: number;
-};
+export type ListingParams = { slug: string } & ListingState;
 
 export async function getListing(params: ListingParams): Promise<{ products: ProductCardDTO[]; total: number } | null> {
   const base = filterForSlug(params.slug);
@@ -37,8 +33,21 @@ export async function getListing(params: ListingParams): Promise<{ products: Pro
 
   await readDb();
   const filter: Record<string, unknown> = { ...base, isPublished: true };
-  if (params.metal) filter["variants.metal"] = params.metal;
-  if (params.maxPrice) filter["variants.price"] = { $lte: params.maxPrice };
+
+  // Metal, price and "on sale" must hold for the SAME variant ("silver under ₾100" = a silver option under ₾100),
+  // so they go into one $elemMatch instead of separate dotted-path conditions.
+  const variant: Record<string, unknown> = {};
+  const metal = params.metal ?? (base["variants.metal"] as string | undefined);
+  if (metal) variant.metal = metal;
+  const { min, max } = priceBounds(params.price);
+  if (min != null || max != null)
+    variant.price = { ...(min != null && { $gte: min }), ...(max != null && { $lt: max }) };
+  if (params.show === "sale") variant.compareAtPrice = { $gt: 0 };
+  if (Object.keys(variant).length > 0) {
+    delete filter["variants.metal"];
+    filter.variants = { $elemMatch: variant };
+  }
+  if (params.show && params.show !== "sale") filter.badges = params.show;
 
   const sort = params.slug === "new" && !params.sort ? SORTS.newest : SORTS[params.sort ?? "featured"];
   const docs = await Product.find(filter).sort(sort).limit(60).lean<ProductDoc[]>();
