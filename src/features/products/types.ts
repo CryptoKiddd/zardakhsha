@@ -19,6 +19,7 @@ export type ProductCardDTO = {
   id: string;
   slug: string;
   name: string;
+  category: ProductDoc["category"];
   /** Short material line under the name, e.g. "Cobalt enamel · 925 silver". */
   subtitle: string;
   image: { url: string; alt: string };
@@ -34,7 +35,6 @@ export type ProductCardDTO = {
 
 export type ProductDetailDTO = ProductCardDTO & {
   description: string;
-  category: ProductDoc["category"];
   images: { url: string; alt: string }[];
   variants: VariantDTO[];
   materials: string;

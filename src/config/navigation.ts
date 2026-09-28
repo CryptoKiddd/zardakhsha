@@ -17,7 +17,13 @@ export const routes = {
   product: (slug: string) => `/product/${slug}` as Route,
   reviews: (slug: string, filter?: string) =>
     (filter ? `/product/${slug}/reviews?filter=${filter}` : `/product/${slug}/reviews`) as Route,
-  search: (q: string) => `/search?q=${encodeURIComponent(q)}` as Route,
+  search: (q: string, category?: string) => {
+    const qs = new URLSearchParams();
+    if (q) qs.set("q", q);
+    if (category) qs.set("category", category);
+    const query = qs.toString();
+    return (query ? `/search?${query}` : "/search") as Route;
+  },
 };
 
 export const CATEGORIES = [

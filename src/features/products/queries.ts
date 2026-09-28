@@ -3,7 +3,7 @@ import { cache } from "react";
 import type { SortOrder } from "mongoose";
 import { readDb } from "@/lib/db";
 import { Product, type ProductDoc } from "@/models";
-import { CATEGORIES } from "@/config/navigation";
+import { CATEGORIES, type CategorySlug } from "@/config/navigation";
 import { toProductCard, toProductDetail } from "./mappers";
 import type { ProductCardDTO, ProductDetailDTO, SortKey } from "./types";
 
@@ -99,13 +99,31 @@ export async function getCompleteTheLook(product: ProductDetailDTO, limit = 3): 
   return docs.map(toProductCard);
 }
 
-export async function searchProducts(q: string, limit = 24): Promise<ProductCardDTO[]> {
+export async function searchProducts(
+  q: string,
+  { category, limit = 24 }: { category?: CategorySlug; limit?: number } = {},
+): Promise<ProductCardDTO[]> {
   const term = q.trim();
   if (term.length < 2) return [];
   await readDb();
-  const docs = await Product.find({ isPublished: true, $text: { $search: term } }, { score: { $meta: "textScore" } })
+  const filter: Record<string, unknown> = { isPublished: true, $text: { $search: term } };
+  if (category) filter.category = category;
+  const docs = await Product.find(filter, { score: { $meta: "textScore" } })
     .sort({ score: { $meta: "textScore" } })
     .limit(limit)
     .lean<ProductDoc[]>();
   return docs.map(toProductCard);
+}
+
+/** Published piece count per category, for the "Explore by Category" tiles. */
+export async function getCategoryCounts(): Promise<Record<CategorySlug, number>> {
+  await readDb();
+  const rows = await Product.aggregate<{ _id: string; n: number }>([
+    { $match: { isPublished: true } },
+    { $group: { _id: "$category", n: { $sum: 1 } } },
+  ]);
+  return Object.fromEntries(CATEGORIES.map((c) => [c.slug, rows.find((r) => r._id === c.slug)?.n ?? 0])) as Record<
+    CategorySlug,
+    number
+  >;
 }

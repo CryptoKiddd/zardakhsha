@@ -33,6 +33,7 @@ export function toProductCard(p: LeanProduct): ProductCardDTO {
     id: String(p._id),
     slug: p.slug,
     name: p.name,
+    category: p.category,
     subtitle: subtitle(vs, colors),
     image: { url: p.images[0]!.url, alt: p.images[0]!.alt },
     hoverImage: p.images[1] ? { url: p.images[1].url, alt: p.images[1].alt } : undefined,
@@ -49,7 +50,6 @@ export function toProductDetail(p: LeanProduct): ProductDetailDTO {
   return {
     ...toProductCard(p),
     description: p.description,
-    category: p.category,
     images: p.images.map((i) => ({ url: i.url, alt: i.alt })),
     variants: variants(p),
     materials: p.materials ?? "",
