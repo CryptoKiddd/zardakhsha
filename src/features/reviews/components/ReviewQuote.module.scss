@@ -1,0 +1,62 @@
+@use "abstracts" as *;
+
+.card {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.head {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+  font-family: var(--font-serif);
+  font-weight: 600;
+  @include text(lg);
+  color: var(--color-gold-text);
+}
+
+.who {
+  display: grid;
+  min-width: 0;
+}
+
+.name {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: 600;
+  @include text(md);
+}
+
+.verified {
+  color: var(--color-gold-text);
+}
+
+.meta {
+  @include text(xs);
+  color: var(--color-muted);
+}
+
+.product {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.quote {
+  @include text(sm);
+  font-style: italic;
+}

@@ -27,7 +27,7 @@ export type ReviewSummaryDTO = {
 
 export type ReviewFilter = "all" | "photos" | "5" | "4" | "3" | "2" | "1";
 
-function toDTO(r: ReviewDoc): ReviewDTO {
+function toDTO(r: Omit<ReviewDoc, "product">): ReviewDTO {
   return {
     id: String(r._id),
     authorName: r.authorName,
@@ -81,4 +81,34 @@ export async function getReviewSummary(productId: string): Promise<ReviewSummary
     recommendPct: total ? Math.round((positive / total) * 100) : 0,
     photos: photoDocs.flatMap((d) => d.photos).slice(0, 12),
   };
+}
+
+/** Store-wide rating for the Home social-proof strip. */
+export async function getStoreRating(): Promise<{ average: number; count: number }> {
+  await readDb();
+  const [agg] = await Review.aggregate<{ average: number; count: number }>([
+    { $group: { _id: null, average: { $avg: "$rating" }, count: { $sum: 1 } } },
+  ]);
+  return { average: agg?.average ?? 0, count: agg?.count ?? 0 };
+}
+
+export type TestimonialDTO = ReviewDTO & { product: { name: string; slug: string } | null };
+
+/** Home testimonials: the newest 5-star reviews from verified buyers, with the product they bought. */
+export async function getHomeReviews(limit = 2): Promise<TestimonialDTO[]> {
+  await readDb();
+  const docs = await Review.find({ rating: 5, verifiedBuyer: true })
+    .sort({ createdAt: -1 })
+    .limit(limit)
+    // Unpublished products populate as null, so the quote renders without a dead link.
+    .populate<{ product: { name: string; slug: string } | null }>({
+      path: "product",
+      select: "name slug",
+      match: { isPublished: true },
+    })
+    .lean();
+  return docs.map((d) => ({
+    ...toDTO(d),
+    product: d.product ? { name: d.product.name, slug: d.product.slug } : null,
+  }));
 }
