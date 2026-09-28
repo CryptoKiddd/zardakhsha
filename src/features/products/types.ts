@@ -19,6 +19,8 @@ export type ProductCardDTO = {
   id: string;
   slug: string;
   name: string;
+  /** Short material line under the name, e.g. "Cobalt enamel · 925 silver". */
+  subtitle: string;
   image: { url: string; alt: string };
   hoverImage?: { url: string; alt: string };
   price: number;

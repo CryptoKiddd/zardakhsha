@@ -54,6 +54,16 @@ export async function getFeatured(limit = 8): Promise<ProductCardDTO[]> {
   return docs.map(toProductCard);
 }
 
+/** Home "Featured Works" bento: hand-picked pieces first, topped up by best-rated if fewer are flagged. */
+export async function getFeaturedWorks(limit = 3): Promise<ProductCardDTO[]> {
+  await readDb();
+  const docs = await Product.find({ isPublished: true })
+    .sort({ featured: -1, "rating.average": -1, "rating.count": -1 })
+    .limit(limit)
+    .lean<ProductDoc[]>();
+  return docs.map(toProductCard);
+}
+
 /** `cache` de-duplicates the call between generateMetadata and the page in one request. */
 export const getProductBySlug = cache(async (slug: string): Promise<ProductDetailDTO | null> => {
   await readDb();

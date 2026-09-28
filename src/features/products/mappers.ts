@@ -15,6 +15,15 @@ function variants(p: LeanProduct): VariantDTO[] {
   }));
 }
 
+const METAL_LABEL = { silver: "925 silver", gold: "gold" } as const;
+
+function subtitle(vs: VariantDTO[], colors: VariantDTO["enamelColor"][]): string {
+  const metals = [...new Set(vs.map((v) => v.metal))];
+  const metal = metals.length > 1 ? "Silver or gold" : METAL_LABEL[metals[0]!];
+  const enamel = colors.length === 1 ? `${colors[0]!.name} enamel` : `${colors.length} enamel colors`;
+  return `${enamel} · ${metal}`;
+}
+
 export function toProductCard(p: LeanProduct): ProductCardDTO {
   const vs = variants(p);
   const cheapest = vs.reduce((min, v) => (v.price < min.price ? v : min), vs[0]!);
@@ -24,6 +33,7 @@ export function toProductCard(p: LeanProduct): ProductCardDTO {
     id: String(p._id),
     slug: p.slug,
     name: p.name,
+    subtitle: subtitle(vs, colors),
     image: { url: p.images[0]!.url, alt: p.images[0]!.alt },
     hoverImage: p.images[1] ? { url: p.images[1].url, alt: p.images[1].alt } : undefined,
     price: cheapest.price,
