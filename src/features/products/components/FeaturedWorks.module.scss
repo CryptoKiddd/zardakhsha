@@ -1,0 +1,151 @@
+@use "abstracts" as *;
+
+.grid {
+  display: grid;
+  gap: var(--space-4);
+
+  @include up(md) {
+    grid-template-columns: 2fr 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+}
+
+.large,
+.small {
+  min-width: 0;
+}
+
+.large {
+  @include up(md) {
+    grid-row: 1 / 3;
+  }
+}
+
+.tile {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  background: var(--color-surface-alt);
+
+  // On desktop the tiles share row heights, so the image flexes instead of keeping its ratio.
+  @include up(md) {
+    flex: 1;
+    aspect-ratio: auto;
+    min-height: 240px;
+  }
+}
+
+.image {
+  object-fit: cover;
+  transition: transform 600ms var(--ease-out);
+}
+
+@media (hover: hover) {
+  .tile:hover .image {
+    transform: scale(1.03);
+  }
+}
+
+.badge {
+  position: absolute;
+  top: var(--space-3);
+  left: var(--space-3);
+}
+
+.body {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+
+  .large & {
+    @include up(md) {
+      padding: var(--space-5);
+    }
+  }
+}
+
+.text {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.nameLarge {
+  @include heading(xl);
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-weight: 600;
+  @include text(md);
+}
+
+// Whole tile is clickable via the title link's pseudo-element (one tab stop).
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.subtitle {
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.buy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+// Nested so it outranks Price's own size class regardless of CSS order.
+.buy .price {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-variant-numeric: lining-nums tabular-nums; // the serif defaults to old-style figures
+  @include text(lg);
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  @include text(sm);
+  font-weight: 600;
+  color: var(--color-gold-text);
+}
+
+.quickAdd {
+  position: relative;
+  z-index: 1; // above the tile's full-size link overlay
+}
+
+// Skeleton
+.skeleton .media,
+.skeletonLine {
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-surface) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.skeletonLine {
+  display: block;
+  height: 72px; // name + subtitle + price row
+  border-radius: var(--radius-sm);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}

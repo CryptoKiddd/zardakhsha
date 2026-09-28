@@ -1,12 +1,22 @@
 @use "abstracts" as *;
 
+// ── Hero ────────────────────────────────────────────────────
 .hero {
   position: relative;
   display: grid;
   align-items: end;
-  min-height: min(78svh, 640px);
+  min-height: min(68svh, 600px);
   color: #fff;
   isolation: isolate;
+
+  // Full-bleed scrim so the gradient never shows as a box inside the max-width content.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.7) 15%, rgb(0 0 0 / 0.2) 55%, transparent 80%);
+  }
 }
 
 .heroImage {
@@ -17,126 +27,295 @@
 .heroContent {
   display: grid;
   justify-items: start;
-  gap: var(--space-3);
+  gap: var(--space-2);
   width: 100%;
   max-width: var(--container-max);
   margin-inline: auto;
-  padding: var(--space-7) var(--gutter);
-  background: linear-gradient(to top, rgb(0 0 0 / 0.5), transparent);
+  padding: var(--space-8) var(--gutter) var(--space-5);
+
+  @include up(lg) {
+    padding-inline: var(--space-6);
+  }
 }
 
-.eyebrow {
+.heroEyebrow {
   @include eyebrow;
-  color: inherit;
-  opacity: 0.85;
+  font-weight: 600;
+  color: var(--color-gold);
 }
 
 .heroTitle {
   @include heading(2xl);
-  font-size: clamp(2.25rem, 9vw, 4rem);
+  font-size: clamp(2rem, 8vw, 4rem);
   line-height: 1.05;
 }
 
 .heroText {
   @include text(md);
+  max-width: 36ch;
   opacity: 0.9;
-  margin-bottom: var(--space-2);
+  margin-bottom: var(--space-3);
 }
 
-.story {
-  .eyebrow {
-    color: var(--color-muted);
+.heroContent .heroCta {
+  // Nested to outrank Button's fullWidth class: full width on phones, natural width from md.
+  @include up(md) {
+    width: auto;
   }
 }
 
-.storyGrid {
+// ── Shared ──────────────────────────────────────────────────
+.eyebrow {
+  @include eyebrow;
+  font-weight: 600;
+}
+
+.textLink {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--tap-min);
+  font-weight: 600;
+  color: var(--color-gold-text);
+
+  @media (hover: hover) {
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 4px;
+    }
+  }
+}
+
+// ── Craft story ─────────────────────────────────────────────
+.story {
   display: grid;
-  gap: var(--space-5);
+  margin-block: var(--space-6);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-alt);
 
   @include up(md) {
     grid-template-columns: 1fr 1fr;
     align-items: center;
+    margin-block: var(--space-7);
   }
 }
 
 .storyImage {
   position: relative;
-  aspect-ratio: 4 / 5;
-  border-radius: var(--radius-md);
-  overflow: hidden;
+  aspect-ratio: 4 / 3;
+
+  @include up(md) {
+    height: 100%;
+    min-height: 360px;
+    aspect-ratio: auto;
+  }
 
   img {
     object-fit: cover;
   }
 }
 
+.storyChip {
+  position: absolute;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--color-overlay);
+  color: #fff;
+  @include text(xs);
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
 .storyText {
   display: grid;
   justify-items: start;
-  gap: var(--space-3);
+  gap: var(--space-2);
+  padding: var(--space-5) var(--space-4) var(--space-3);
 
-  p:not(.eyebrow) {
-    color: var(--color-muted);
+  @include up(md) {
+    padding: var(--space-7) var(--space-6);
   }
 }
 
-.proof {
-  display: flex;
+.storyTitle {
+  @include heading(xl);
+
+  @include up(md) {
+    @include heading(2xl);
+  }
 }
 
+.storyBody {
+  @include text(sm);
+  color: var(--color-muted);
+
+  @include up(md) {
+    @include text(md);
+  }
+}
+
+// ── Social proof ────────────────────────────────────────────
+.proof {
+  display: grid;
+  gap: var(--space-5);
+  padding-block: var(--space-6);
+
+  @include up(md) {
+    padding-block: var(--space-7);
+  }
+}
+
+.proofHead {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+  text-align: center;
+}
+
+.proofTitle {
+  @include text(lg);
+  font-family: var(--font-sans);
+  font-weight: 600;
+}
+
+.proofText {
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.quotes {
+  display: grid;
+  gap: var(--space-3);
+
+  @include up(md) {
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+  }
+}
+
+.proofSkeleton {
+  height: 160px; // stars + headline + line; testimonials stream in below
+}
+
+// ── Trust row ───────────────────────────────────────────────
 .trust {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--space-4);
-  padding-block: var(--space-6);
-  border-block: 1px solid var(--color-border);
+  gap: var(--space-4) var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
 
   @include up(md) {
     grid-template-columns: repeat(4, 1fr);
+    padding: var(--space-5);
   }
 
   li {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: var(--space-2);
-    @include text(sm);
+    min-width: 0;
   }
 }
 
+.trustIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  color: var(--color-gold-text);
+}
+
+.trustTitle {
+  display: block;
+  @include text(sm);
+  font-weight: 600;
+}
+
+.trustText {
+  display: block;
+  @include text(xs);
+  color: var(--color-muted);
+}
+
+// ── Newsletter ──────────────────────────────────────────────
 .newsletter {
   display: grid;
-  gap: var(--space-2);
-  text-align: center;
   justify-items: center;
+  gap: var(--space-2);
+  margin-block: var(--space-6);
+  padding: var(--space-6) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+  text-align: center;
 
-  p {
+  > p {
+    @include text(sm);
+    max-width: 42ch;
     color: var(--color-muted);
   }
+
+  @include up(md) {
+    padding: var(--space-7) var(--space-6);
+  }
+}
+
+.newsletterIcon {
+  display: grid;
+  place-items: center;
+  width: 48px;
+  height: 48px;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--color-gold);
+  color: var(--color-text);
+}
+
+.newsletterTitle {
+  @include heading(xl);
 }
 
 .newsletterForm {
-  display: flex;
+  display: grid;
+  gap: var(--space-2);
   width: 100%;
   max-width: 440px;
   margin-top: var(--space-3);
-  border: 1px solid var(--color-text);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
 
   input {
-    flex: 1;
-    min-width: 0;
     min-height: 48px;
     padding-inline: var(--space-4);
-    border: 0;
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-sm);
     background: var(--color-surface);
-    font-size: var(--text-md);
+    font-size: var(--text-md); // 16px: no iOS zoom
+
+    &:focus-visible {
+      @include focus-ring;
+    }
   }
 
   button {
-    padding-inline: var(--space-5);
+    min-height: 48px;
+    border-radius: var(--radius-sm);
     background: var(--color-text);
     color: var(--color-bg);
-    font-weight: 500;
+    font-weight: 600;
+
+    &:focus-visible {
+      @include focus-ring;
+    }
   }
 }
