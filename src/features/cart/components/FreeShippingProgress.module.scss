@@ -5,17 +5,33 @@
   gap: var(--space-2);
   padding: var(--space-4);
   border-radius: var(--radius-md);
-  background: var(--color-surface);
+  background: var(--color-surface-alt);
 }
 
 .text {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
   @include text(sm);
+  font-weight: 500;
+}
+
+.icon {
+  flex-shrink: 0;
+  color: var(--color-gold-text);
+}
+
+.amount {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  @include text(lg);
+  font-variant-numeric: lining-nums;
 }
 
 .bar {
   appearance: none;
   width: 100%;
-  height: 4px;
+  height: 6px;
   border: 0;
   border-radius: var(--radius-pill);
   background: var(--color-border);
@@ -26,9 +42,27 @@
   }
   &::-webkit-progress-value {
     background: var(--color-accent);
+    border-radius: var(--radius-pill);
     transition: width var(--dur-base) var(--ease-out);
   }
   &::-moz-progress-bar {
     background: var(--color-accent);
+    border-radius: var(--radius-pill);
   }
+
+  [data-unlocked] & {
+    &::-webkit-progress-value {
+      background: var(--color-success);
+    }
+    &::-moz-progress-bar {
+      background: var(--color-success);
+    }
+  }
+}
+
+.meta {
+  display: flex;
+  justify-content: space-between;
+  @include text(xs);
+  color: var(--color-muted);
 }

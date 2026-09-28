@@ -32,19 +32,22 @@ export function CartLines({ lines }: { lines: CartLineDTO[] }) {
     <ul className={s.list} aria-busy={isPending}>
       {optimistic.map((line) => (
         <li key={line.sku} className={s.line}>
-          <Link href={routes.product(line.slug)} className={s.thumb}>
-            <Image src={line.image.url} alt={line.image.alt} fill sizes="96px" />
+          <Link href={routes.product(line.slug)} className={s.thumb} tabIndex={-1} aria-hidden>
+            <Image src={line.image.url} alt="" fill sizes="104px" />
           </Link>
           <div className={s.info}>
-            <Link href={routes.product(line.slug)} className={s.name}>
-              {line.name}
-            </Link>
+            <div className={s.top}>
+              <Link href={routes.product(line.slug)} className={s.name}>
+                {line.name}
+              </Link>
+              <IconButton
+                icon="trash"
+                label={`Remove ${line.name} from bag`}
+                onClick={() => update(line.sku, 0)}
+                className={s.remove}
+              />
+            </div>
             <p className={s.variant}>{line.variantLabel}</p>
-            <Price
-              amount={line.price * line.quantity}
-              compareAt={line.compareAtPrice && line.compareAtPrice * line.quantity}
-              size="sm"
-            />
             <div className={s.controls}>
               <div className={s.stepper} role="group" aria-label={`Quantity for ${line.name}`}>
                 <IconButton
@@ -62,9 +65,11 @@ export function CartLines({ lines }: { lines: CartLineDTO[] }) {
                   onClick={() => update(line.sku, line.quantity + 1)}
                 />
               </div>
-              <button type="button" className={s.remove} onClick={() => update(line.sku, 0)}>
-                Remove
-              </button>
+              <Price
+                amount={line.price * line.quantity}
+                compareAt={line.compareAtPrice && line.compareAtPrice * line.quantity}
+                className={s.price}
+              />
             </div>
           </div>
         </li>

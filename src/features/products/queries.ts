@@ -127,3 +127,13 @@ export async function getCategoryCounts(): Promise<Record<CategorySlug, number>>
     number
   >;
 }
+
+/** Bag "Pairs well with": best-rated published pieces the shopper doesn't already have in the bag. */
+export async function getComplements(excludeProductIds: string[], limit = 6): Promise<ProductCardDTO[]> {
+  await readDb();
+  const docs = await Product.find({ isPublished: true, _id: { $nin: excludeProductIds } })
+    .sort({ featured: -1, "rating.average": -1, "rating.count": -1 })
+    .limit(limit)
+    .lean<ProductDoc[]>();
+  return docs.map(toProductCard);
+}

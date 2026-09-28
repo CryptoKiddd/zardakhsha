@@ -2,20 +2,89 @@
 
 .page {
   display: grid;
-  gap: var(--space-5);
-  padding-block: var(--space-5);
+  grid-template-columns: minmax(0, 1fr); // carousels must not widen the column
+  gap: var(--space-4);
   max-width: 720px;
+  padding-block: var(--space-5);
 }
 
+.title {
+  @include heading(2xl);
+}
+
+.count {
+  font-family: var(--font-sans);
+  @include text(md);
+  color: var(--color-muted);
+}
+
+.trust {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-2) var(--space-4);
+  @include text(xs);
+  color: var(--color-muted);
+
+  li {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-1);
+  }
+
+  svg {
+    color: var(--color-gold-text);
+  }
+}
+
+.complements {
+  padding-block: var(--space-4) 0;
+}
+
+// Sticky bar: total on the left, one CTA on the right.
+.barTotal {
+  display: grid;
+  flex-shrink: 0;
+  @include text(xs);
+  color: var(--color-muted);
+
+  strong {
+    font-family: var(--font-serif);
+    font-weight: 700;
+    font-variant-numeric: lining-nums tabular-nums;
+    @include text(xl);
+    color: var(--color-text);
+  }
+}
+
+.barCta {
+  flex: 1;
+}
+
+// ── Empty bag ───────────────────────────────────────────────
 .empty {
   display: grid;
   justify-items: center;
   gap: var(--space-3);
-  padding-block: var(--space-8);
+  padding: var(--space-7) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
   text-align: center;
 
   p {
+    max-width: 32ch;
+    margin-bottom: var(--space-2);
     color: var(--color-muted);
-    margin-bottom: var(--space-3);
   }
+}
+
+.emptyIcon {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+  color: var(--color-gold-text);
 }
