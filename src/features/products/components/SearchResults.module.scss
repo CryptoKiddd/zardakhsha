@@ -1,0 +1,121 @@
+@use "abstracts" as *;
+
+.list {
+  display: grid;
+  gap: var(--space-3);
+
+  @include up(md) {
+    grid-template-columns: 1fr 1fr;
+  }
+  @include up(lg) {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: 104px minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-surface-alt);
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.badge {
+  position: absolute;
+  left: var(--space-1);
+  bottom: var(--space-1);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+  padding-block: var(--space-1);
+}
+
+.category {
+  @include eyebrow;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+}
+
+.name {
+  @include heading(lg);
+  @include line-clamp(1);
+}
+
+// Whole row is clickable via the title link's pseudo-element (one tab stop).
+.link::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+}
+
+.subtitle {
+  @include text(xs);
+  @include line-clamp(1);
+  color: var(--color-muted);
+}
+
+.buy {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+// Nested so it outranks Price's own size class regardless of CSS order.
+.buy .price {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-variant-numeric: lining-nums tabular-nums;
+  @include text(lg);
+}
+
+.add {
+  position: relative;
+  z-index: 1; // above the row's full-size link overlay
+}
+
+// Skeleton
+.shimmer {
+  display: block;
+  border-radius: var(--radius-sm);
+  background: linear-gradient(90deg, var(--color-border) 25%, var(--color-surface) 50%, var(--color-border) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite linear;
+}
+
+.skeletonLine {
+  height: 40px;
+}
+
+.skeletonLineShort {
+  width: 60%;
+  height: 16px;
+  margin-top: var(--space-2);
+}
+
+@keyframes shimmer {
+  to {
+    background-position: -200% 0;
+  }
+}
