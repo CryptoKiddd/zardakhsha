@@ -1,48 +1,111 @@
 @use "abstracts" as *;
 
-.form {
-  position: relative;
-  margin-top: var(--space-4);
-}
+.page {
+  display: grid;
+  // minmax(0, …): the scrolling category row must not widen the column past the viewport.
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
+  padding-block: var(--space-4) var(--space-6);
 
-.icon {
-  position: absolute;
-  top: 50%;
-  left: var(--space-4);
-  translate: 0 -50%;
-  color: var(--color-muted);
-  pointer-events: none;
-}
-
-.input {
-  width: 100%;
-  min-height: 52px;
-  padding-left: calc(var(--space-4) * 2 + 20px);
-  padding-right: var(--space-4);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-pill);
-  background: var(--color-surface);
-  font-size: var(--text-md);
-
-  &:focus-visible {
-    outline: none;
-    border-color: var(--color-accent);
+  @include up(md) {
+    gap: var(--space-5);
+    padding-block: var(--space-6) var(--space-7);
   }
 }
 
-.trending,
+.categories {
+  @include scroll-row(var(--space-2));
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  @include heading(xl);
+}
+
+.titleIcon {
+  color: var(--color-gold-text);
+}
+
+// ── Results ────────────────────────────────────────────────
 .results {
   display: grid;
   gap: var(--space-3);
-  padding-block: var(--space-5);
 }
 
-.label {
-  @include eyebrow;
+.resultsHead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-3);
 }
 
-.chips {
+.count {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  font-family: var(--font-sans);
+  @include text(xs);
+  font-weight: 600;
+  color: var(--color-gold-text);
+}
+
+.query {
+  @include text(xs);
+  @include line-clamp(1);
+  color: var(--color-muted);
+}
+
+.empty {
+  padding: var(--space-5) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  @include text(sm);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+// ── Discovery ──────────────────────────────────────────────
+.block {
+  display: grid;
+  gap: var(--space-3);
+  padding-top: var(--space-2);
+}
+
+.trending {
   display: flex;
   flex-wrap: wrap;
   gap: var(--space-2);
+}
+
+.authenticity {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+}
+
+.authIcon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: var(--tap-min);
+  height: var(--tap-min);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  color: var(--color-gold-text);
+}
+
+.authTitle {
+  font-weight: 600;
+  @include text(md);
+}
+
+.authText {
+  @include text(sm);
+  color: var(--color-muted);
 }
