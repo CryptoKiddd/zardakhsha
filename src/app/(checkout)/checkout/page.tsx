@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
-import { Container } from "@/components/ui";
+import { Container, Icon } from "@/components/ui";
 import { WithActionBar } from "@/components/layout";
 import { GoogleSignInButton } from "@/features/account/components/AuthButtons";
 import { getAddresses } from "@/features/account/queries";
@@ -22,10 +22,11 @@ export default async function CheckoutPage() {
   return (
     <WithActionBar>
       <Container className={s.page}>
-        <h1>Checkout</h1>
+        <h1 className={s.title}>Checkout</h1>
         <OrderSummary subtotal={cart.subtotal} count={cart.count} collapsible />
         {!session && (
           <div className={s.signin}>
+            <p className={s.muted}>Have an account? Sign in to use your saved address.</p>
             <GoogleSignInButton callbackURL="/checkout" />
             <p className={s.muted}>or continue as a guest below</p>
           </div>
@@ -34,7 +35,12 @@ export default async function CheckoutPage() {
           email={session?.user.email}
           defaultAddress={defaultAddress}
           total={cart.subtotal + shippingFor(cart.subtotal)}
+          freeDelivery={shippingFor(cart.subtotal) === 0}
         />
+        <p className={s.guarantee}>
+          <Icon name="shield" size={18} />
+          Handmade in Tbilisi · Hallmarked 925 silver · Free 30-day returns
+        </p>
       </Container>
     </WithActionBar>
   );

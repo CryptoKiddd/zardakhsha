@@ -2,18 +2,43 @@
 
 .page {
   display: grid;
-  gap: var(--space-5);
-  padding-block: var(--space-5);
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-4);
   max-width: 640px;
+  padding-block: var(--space-5);
+}
+
+.title {
+  @include heading(2xl);
 }
 
 .signin {
   display: grid;
   gap: var(--space-2);
   justify-items: center;
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+  text-align: center;
 }
 
 .muted {
   @include text(sm);
   color: var(--color-muted);
+}
+
+.guarantee {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding-block: var(--space-2);
+  @include text(xs);
+  color: var(--color-muted);
+  text-align: center;
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-gold-text);
+  }
 }
