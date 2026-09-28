@@ -1,0 +1,446 @@
+@use "abstracts" as *;
+
+// Timing for one slide. The active dot's fill runs this long and its end advances the carousel.
+$slide-ms: 6500ms;
+
+.carousel {
+  position: relative;
+  color: #fff;
+  background: var(--color-text);
+  touch-action: pan-y; // vertical scroll stays native; horizontal drags become swipes
+  user-select: none;
+}
+
+.viewport {
+  position: relative;
+  display: grid;
+  min-height: min(72svh, 620px);
+}
+
+// ── Slide stack ─────────────────────────────────────────────
+// All slides share one grid cell; only the active one is visible and interactive (others are `inert`).
+.slide {
+  position: relative;
+  grid-area: 1 / 1;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  isolation: isolate;
+  opacity: 0;
+  visibility: hidden;
+  transition:
+    opacity 700ms var(--ease-out),
+    visibility 0s linear 700ms;
+
+  &[data-active] {
+    z-index: 1;
+    opacity: 1;
+    visibility: visible;
+    transition:
+      opacity 700ms var(--ease-out),
+      visibility 0s;
+  }
+
+  // Ornaments: thin gold shapes over the photo. Shape and motion change per effect below.
+  &::before,
+  &::after {
+    content: "";
+    position: absolute;
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  &::before {
+    top: 12%;
+    right: -18%;
+    width: min(70vw, 26rem);
+    aspect-ratio: 1;
+    border: 1px solid rgb(201 164 92 / 0.55);
+    border-radius: 50%;
+  }
+
+  &::after {
+    top: 22%;
+    right: 14%;
+    width: 14px;
+    height: 14px;
+    border: 1px solid var(--color-gold);
+    rotate: 45deg;
+  }
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+
+  // Scrim for text contrast, full-bleed so it never shows as a box on wide screens.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.72) 12%, rgb(0 0 0 / 0.2) 55%, transparent 80%);
+  }
+}
+
+.image {
+  object-fit: cover;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  display: grid;
+  justify-items: start;
+  gap: var(--space-2);
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding: var(--space-8) var(--gutter) calc(var(--space-7) + var(--space-3));
+  // Keeps gold/white text legible on the brighter photos (e.g. the cream silk gift shot).
+  text-shadow: 0 1px 12px rgb(0 0 0 / 0.45);
+
+  @include up(lg) {
+    padding-inline: var(--space-6);
+  }
+
+  // Gold rule above the eyebrow, drawn in on every slide.
+  &::before {
+    content: "";
+    width: 48px;
+    height: 1px;
+    background: var(--color-gold);
+    transform-origin: left;
+  }
+}
+
+.eyebrow {
+  @include eyebrow;
+  font-weight: 600;
+  color: var(--color-gold);
+}
+
+.title {
+  @include heading(2xl);
+  font-size: clamp(2rem, 8vw, 4rem);
+  line-height: 1.05;
+  max-width: 14ch;
+}
+
+.text {
+  @include text(md);
+  max-width: 36ch;
+  opacity: 0.9;
+  margin-bottom: var(--space-3);
+}
+
+.cta {
+  width: 100%;
+
+  @include up(md) {
+    width: auto;
+  }
+}
+
+// ── Effect-specific ornament shapes (static) ────────────────
+.curtain {
+  // A vertical gold thread instead of the ring.
+  &::before {
+    top: 0;
+    right: auto;
+    left: 12%;
+    width: 1px;
+    height: 46%;
+    border: 0;
+    border-radius: 0;
+    background: linear-gradient(to bottom, transparent, var(--color-gold));
+    aspect-ratio: auto;
+  }
+
+  &::after {
+    top: 46%;
+    right: auto;
+    left: calc(12% - 7px);
+  }
+}
+
+.iris {
+  // Double ring: the circle plus an outline echo.
+  &::before {
+    top: 18%;
+    right: 8%;
+    width: min(40vw, 14rem);
+    outline: 1px solid rgb(201 164 92 / 0.3);
+    outline-offset: 14px;
+  }
+
+  &::after {
+    display: none;
+  }
+}
+
+.rise {
+  &::before {
+    top: auto;
+    bottom: 38%;
+    right: -30%;
+    width: min(90vw, 34rem);
+    border-style: dashed;
+    border-color: rgb(201 164 92 / 0.4);
+  }
+
+  &::after {
+    top: 16%;
+    right: 22%;
+    width: 10px;
+    height: 10px;
+    background: var(--color-gold);
+  }
+}
+
+// ── Controls ────────────────────────────────────────────────
+.controls {
+  position: absolute;
+  z-index: 2;
+  inset: auto 0 var(--space-3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+
+  @include up(lg) {
+    padding-inline: var(--space-6);
+  }
+}
+
+.dots {
+  display: flex;
+}
+
+// 44px tap target around a thin bar.
+.dot {
+  @include tap-target;
+  min-width: 32px;
+
+  &::before {
+    content: "";
+    width: 20px;
+    height: 3px;
+    border-radius: var(--radius-pill);
+    background: rgb(255 255 255 / 0.45);
+    transition:
+      width var(--dur-base) var(--ease-out),
+      background-color var(--dur-base) var(--ease-out);
+  }
+
+  &[aria-current] {
+    position: relative;
+    min-width: 56px;
+
+    &::before {
+      width: 40px;
+    }
+  }
+
+  &:focus-visible {
+    outline: none;
+
+    &::before {
+      @include focus-ring;
+    }
+  }
+}
+
+.progress {
+  position: absolute;
+  left: 8px;
+  width: 40px;
+  height: 3px;
+  border-radius: var(--radius-pill);
+  background: var(--color-gold);
+  transform-origin: left;
+  scale: 0 1;
+}
+
+.toggle {
+  color: #fff;
+}
+
+// ── Motion (only when the user hasn't asked for less) ───────
+@media (prefers-reduced-motion: no-preference) {
+  .progress {
+    animation: progress $slide-ms linear forwards paused;
+
+    .carousel[data-running] & {
+      animation-play-state: running;
+    }
+  }
+
+  // Text: staggered entrance; direction/style varies per effect.
+  .slide[data-active] .content {
+    &::before {
+      animation: draw 700ms var(--ease-out) 150ms both;
+    }
+
+    > * {
+      animation: text-rise 700ms var(--ease-out) both;
+    }
+    > :nth-child(1) {
+      animation-delay: 250ms;
+    }
+    > :nth-child(2) {
+      animation-delay: 370ms;
+    }
+    > :nth-child(3) {
+      animation-delay: 490ms;
+    }
+    > :nth-child(4) {
+      animation-delay: 610ms;
+    }
+  }
+
+  .slide[data-active]::before {
+    animation:
+      ornament-in 1200ms var(--ease-out) both,
+      drift 24s linear 1200ms infinite;
+  }
+
+  .slide[data-active]::after {
+    animation:
+      ornament-in 900ms var(--ease-out) 500ms both,
+      twinkle 3.2s ease-in-out 1400ms infinite;
+  }
+
+  // 1. Zoom: slow Ken Burns push-out.
+  .zoom[data-active] .image {
+    animation: ken-burns 9s var(--ease-out) both;
+  }
+
+  // 2. Curtain: the photo wipes in from the left, text slides in sideways, gold thread drops down.
+  .curtain[data-active] {
+    .media {
+      animation: curtain 1100ms cubic-bezier(0.7, 0, 0.2, 1) both;
+    }
+
+    .content > * {
+      animation-name: text-slide;
+    }
+
+    &::before {
+      animation: thread 1200ms var(--ease-out) 400ms both;
+    }
+  }
+
+  // 3. Iris: the photo opens from a circle around the piece, text un-blurs.
+  .iris[data-active] {
+    .media {
+      animation: iris 1300ms var(--ease-out) both;
+    }
+
+    .content > * {
+      animation-name: text-focus;
+    }
+  }
+
+  // 4. Rise: the photo lifts and settles, dashed ring rotates slowly.
+  .rise[data-active] .media {
+    animation: rise 1200ms var(--ease-out) both;
+  }
+}
+
+@keyframes progress {
+  to {
+    scale: 1 1;
+  }
+}
+
+@keyframes draw {
+  from {
+    transform: scaleX(0);
+  }
+}
+
+@keyframes text-rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
+@keyframes text-slide {
+  from {
+    opacity: 0;
+    transform: translateX(-28px);
+  }
+}
+
+@keyframes text-focus {
+  from {
+    opacity: 0;
+    filter: blur(8px);
+  }
+}
+
+@keyframes ornament-in {
+  from {
+    opacity: 0;
+    scale: 0.6;
+  }
+}
+
+@keyframes drift {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes twinkle {
+  50% {
+    opacity: 0.35;
+    scale: 0.7;
+  }
+}
+
+@keyframes ken-burns {
+  from {
+    transform: scale(1.14);
+  }
+}
+
+@keyframes curtain {
+  from {
+    clip-path: inset(0 100% 0 0);
+  }
+  to {
+    clip-path: inset(0 0 0 0);
+  }
+}
+
+@keyframes thread {
+  from {
+    transform: scaleY(0);
+    transform-origin: top;
+  }
+  to {
+    transform-origin: top;
+  }
+}
+
+@keyframes iris {
+  from {
+    clip-path: circle(0% at 65% 45%);
+  }
+  to {
+    clip-path: circle(150% at 65% 45%);
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0.3;
+    transform: translateY(6%) scale(1.08);
+  }
+}

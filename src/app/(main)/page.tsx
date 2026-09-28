@@ -1,7 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Suspense } from "react";
-import { ButtonLink, Container, Icon, Rating, Section, type IconName } from "@/components/ui";
+import { Container, Icon, Rating, Section, type IconName } from "@/components/ui";
 import { routes } from "@/config/navigation";
 import { CategoryChips } from "@/features/products/components/CategoryChips";
 import { FeaturedWorks, FeaturedWorksSkeleton } from "@/features/products/components/FeaturedWorks";
@@ -10,7 +10,58 @@ import { ProductGridSkeleton } from "@/features/products/components/ProductGridS
 import { getFeatured, getFeaturedWorks } from "@/features/products/queries";
 import { ReviewQuote } from "@/features/reviews/components/ReviewQuote";
 import { getHomeReviews, getStoreRating } from "@/features/reviews/queries";
+import { HeroCarousel, type HeroSlide } from "@/features/marketing/components/HeroCarousel";
 import s from "./home.module.scss";
+
+// One effect per slide so the rotation never feels repetitive.
+const SLIDES: HeroSlide[] = [
+  {
+    id: "new",
+    image: { url: "/images/home/hero.jpg", alt: "A hand wearing cloisonné enamel rings in silver and gold" },
+    eyebrow: "Haute Vitreous Jewelry · Tbilisi",
+    title: "Color, fired by hand.",
+    text: "Handcrafted 925 sterling silver & pure vitreous kiln-fused enamel heirlooms.",
+    cta: { label: "Shop New Collection", href: routes.shop("new") },
+    effect: "zoom",
+  },
+  {
+    id: "craft",
+    image: {
+      url: "/images/home/slide-kiln.jpg",
+      alt: "An enameller inspecting a finished cloisonné ring under the kiln light",
+    },
+    eyebrow: "Minankari Heritage",
+    title: "Five firings at 800°C.",
+    text: "Silver wire, crushed mineral glass and patience: every piece is fired by hand in our atelier.",
+    cta: { label: "Discover the Craft", href: "/about" },
+    effect: "curtain",
+  },
+  {
+    id: "rings",
+    image: {
+      url: "/images/home/slide-rings.jpg",
+      alt: "A lapis and ruby enamel ring with gold filigree on warm stone",
+      position: "50% 40%",
+    },
+    eyebrow: "The Ring Edit",
+    title: "Rings that hold the light.",
+    text: "Lapis, ruby and cobalt enamel set in sterling silver or gold.",
+    cta: { label: "Shop Rings", href: routes.shop("rings") },
+    effect: "iris",
+  },
+  {
+    id: "gifts",
+    image: {
+      url: "/images/home/slide-gifts.jpg",
+      alt: "A floral enamel pendant on a silver chain resting on cream silk",
+    },
+    eyebrow: "Gifts",
+    title: "Heirlooms worth giving.",
+    text: "Gift-ready pieces, packed by hand in Tbilisi. Free delivery over ₾150.",
+    cta: { label: "Shop Gifts", href: routes.shop("gifts") },
+    effect: "rise",
+  },
+];
 
 const TRUST: { icon: IconName; title: string; text: string }[] = [
   { icon: "sparkle", title: "Minankari", text: "Handcrafted in Tbilisi" },
@@ -22,31 +73,7 @@ const TRUST: { icon: IconName; title: string; text: string }[] = [
 export default function HomePage() {
   return (
     <>
-      {/* Hero */}
-      <section className={s.hero}>
-        <Image
-          src="/images/home/hero.jpg"
-          alt="A hand wearing cloisonné enamel rings in silver and gold"
-          fill
-          priority
-          sizes="100vw"
-          className={s.heroImage}
-        />
-        <div className={s.heroContent}>
-          <p className={s.heroEyebrow}>Haute Vitreous Jewelry · Tbilisi</p>
-          <h1 className={s.heroTitle}>Color, fired by hand.</h1>
-          <p className={s.heroText}>Handcrafted 925 sterling silver &amp; pure vitreous kiln-fused enamel heirlooms.</p>
-          <ButtonLink
-            href={routes.shop("new")}
-            size="lg"
-            fullWidth
-            iconEnd={<Icon name="arrowRight" size={20} />}
-            className={s.heroCta}
-          >
-            Shop New Collection
-          </ButtonLink>
-        </div>
-      </section>
+      <HeroCarousel slides={SLIDES} />
 
       <Container>
         <CategoryChips />
