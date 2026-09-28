@@ -3,8 +3,8 @@ import type { Route } from "next";
 /**
  * NAVIGATION CONTRACT: the one place that decides how users move around.
  * Header variant per screen is set by the route-group layouts:
- *   app/(main)/layout.tsx      → Header A (burger + search | logo | account + bag)
- *   app/(inner)/layout.tsx     → Header B (back | logo | bag)
+ *   app/(main)/layout.tsx      → Header A (burger + search | logo | account + bag): /, /shop/*, /account
+ *   app/(inner)/layout.tsx     → Header B (back | logo | bag): inner pages incl. /search
  *   app/(checkout)/…/layout.tsx→ Header C (back | logo | secure)
  * There is NO bottom tab bar anywhere. Don't add headers inside pages.
  */

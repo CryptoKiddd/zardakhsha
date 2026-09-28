@@ -9,7 +9,7 @@ import s from "./Header.module.scss";
 /**
  * The ONLY header in the app. Three variants, fixed 3-zone grid:
  *   A: [menu][search]  LOGO  [account][bag]    top-level screens
- *   B: [back]          LOGO  [bag]             inner screens
+ *   B: [back]          LOGO  [bag]             inner screens (incl. /search: the back arrow closes it)
  *   C: [back?]         LOGO  [🔒 Secure]        checkout
  * Rendered by route-group layouts, never by pages.
  */

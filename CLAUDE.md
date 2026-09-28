@@ -27,8 +27,8 @@ npm run format       # prettier --write
 ```
 src/
 ├── app/                        # ROUTES ONLY: thin pages that compose features
-│   ├── (main)/                 # Header A: home, shop/[slug], search, account (dashboard)
-│   ├── (inner)/                # Header B: product/[slug], reviews, bag, login, account/*, about, contact
+│   ├── (main)/                 # Header A: home, shop/[slug], account (dashboard)
+│   ├── (inner)/                # Header B: product/[slug], reviews, search, bag, login, account/*, about, contact
 │   ├── (checkout)/             # Header C: checkout, order/[number] (no back arrow)
 │   ├── api/auth/[...all]/      # Better Auth handler
 │   ├── layout.tsx              # <html>, fonts, globals.scss
@@ -64,8 +64,8 @@ src/
 
 - **No bottom tab bar. Ever.** Only the top header navigates.
 - The header is rendered by **route-group layouts**, never by pages. Pick the header by placing the page in the right group.
-  - **A** `[☰][🔍] LOGO [👤][👜]`: top-level: `/`, `/shop/*`, `/search`, `/account`
-  - **B** `[←] LOGO [👜]`: inner: `/product/*`, `/product/*/reviews`, `/bag`, `/login`, `/account/*`, `/about`, `/contact`
+  - **A** `[☰][🔍] LOGO [👤][👜]`: top-level: `/`, `/shop/*`, `/account`
+  - **B** `[←] LOGO [👜]`: inner: `/product/*`, `/product/*/reviews`, `/search`, `/bag`, `/login`, `/account/*`, `/about`, `/contact`
   - **C** `[←] LOGO [🔒 Secure]`: `/checkout`; `/order/*` has no back arrow
 - One logo per screen: `ZARDAKHSHA` + `ATELIER`, centered, English only.
 - Back arrow: `router.back()` if the user came from inside the shop, else `backFallback()` in `config/navigation.ts`.
