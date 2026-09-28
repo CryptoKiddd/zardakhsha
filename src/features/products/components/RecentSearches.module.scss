@@ -1,0 +1,59 @@
+@use "abstracts" as *;
+
+.head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  margin-bottom: var(--space-3);
+}
+
+.title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  @include heading(xl);
+}
+
+.titleIcon {
+  color: var(--color-gold-text);
+}
+
+.clear {
+  @include tap-target;
+  @include text(sm);
+  font-weight: 600;
+  color: var(--color-gold-text);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+}
+
+.link {
+  display: flex;
+  flex: 1;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+  min-height: var(--tap-min);
+  padding-left: var(--space-3);
+  @include text(sm);
+}
+
+.text {
+  @include line-clamp(1);
+}
+
+.muted {
+  flex-shrink: 0;
+  color: var(--color-muted);
+}
