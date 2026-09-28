@@ -45,7 +45,7 @@ async function main() {
     const updated = await Order.findOneAndUpdate(
       { number, status: { $in: allowedFrom(to) } },
       { $set: { status: to }, $push: { statusHistory: { status: to, at: new Date() } } },
-      { new: true },
+      { returnDocument: "after" },
     ).lean();
     if (!updated) fail(`${number} changed while updating; run again to see its current status.`);
 

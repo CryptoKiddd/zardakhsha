@@ -1,6 +1,6 @@
 import clsx from "clsx";
 import { Icon, type IconName } from "@/components/ui";
-import { STATUS_LABEL, TIMELINE, timelineIndex, type OrderStatus } from "@/config/order-status";
+import { TIMELINE, timelineIndex, type OrderStatus } from "@/config/order-status";
 import type { OrderDetailDTO } from "../queries";
 import s from "./OrderTimeline.module.scss";
 
@@ -35,12 +35,7 @@ export function OrderTimeline({ status, reachedAt }: { status: OrderStatus; reac
               <Icon name={state === "done" ? "check" : ICON[step.key]} size={16} />
             </span>
             <div className={s.body}>
-              <p className={s.title}>
-                {step.title}
-                {state === "current" && status === "pending_payment" && (
-                  <span className={s.tag}>{STATUS_LABEL.pending_payment}</span>
-                )}
-              </p>
+              <p className={s.title}>{step.title}</p>
               <p className={s.text}>{step.text}</p>
               {at && state !== "upcoming" && (
                 <time className={s.time} dateTime={at}>
