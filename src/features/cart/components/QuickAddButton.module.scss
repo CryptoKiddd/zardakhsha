@@ -4,7 +4,16 @@
   display: contents;
 }
 
-.button {
-  background: var(--color-surface);
-  box-shadow: var(--shadow-sm);
+// Solid square "+" in the card's price row (design: dark tile, light glyph).
+// Nested under .form so it outranks IconButton's base colors regardless of CSS order.
+.form .button {
+  border-radius: var(--radius-sm);
+  background: var(--color-text);
+  color: var(--color-bg);
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background: var(--color-accent);
+    }
+  }
 }

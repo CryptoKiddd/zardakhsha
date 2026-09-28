@@ -24,7 +24,11 @@
 }
 
 .slide {
-  width: 44%;
+  width: 66%; // design: ~1.5 cards visible so the row reads as swipeable
+
+  @include up(sm) {
+    width: 44%;
+  }
 
   @include up(md) {
     width: 28%;

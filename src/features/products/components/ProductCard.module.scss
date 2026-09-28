@@ -2,17 +2,20 @@
 
 .card {
   position: relative;
-  display: grid;
-  gap: var(--space-2);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   min-width: 0;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 .media {
   position: relative;
   aspect-ratio: 4 / 5;
-  border-radius: var(--radius-md);
-  overflow: hidden;
-  background: var(--color-surface);
+  background: var(--color-surface-alt);
 }
 
 .image,
@@ -37,41 +40,62 @@
   left: var(--space-2);
 }
 
-.badge,
-.quickAdd {
-  z-index: 1; // above the card's full-size link overlay
-}
-
-.quickAdd {
-  position: absolute;
-  right: var(--space-2);
-  bottom: var(--space-2);
-}
-
 .body {
-  display: grid;
-  gap: 2px;
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-1);
+  padding: var(--space-3);
+
+  @include up(md) {
+    padding: var(--space-4);
+  }
 }
 
 .name {
   font-family: var(--font-sans);
-  font-weight: 400;
+  font-weight: 600;
   @include text(sm);
   @include line-clamp(2);
+
+  @include up(md) {
+    @include text(md);
+  }
 }
 
 // Whole card is clickable via the title link's pseudo-element (one tab stop, good for a11y).
 .nameLink::after {
   content: "";
   position: absolute;
-  inset: 0 0 auto;
-  aspect-ratio: 4 / 5;
+  inset: 0;
 }
 
-.meta {
+.subtitle {
+  @include text(xs);
+  @include line-clamp(1);
+  color: var(--color-muted);
+}
+
+.buy {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-2);
-  min-height: 16px;
+  width: 100%;
+  margin-top: auto;
+  padding-top: var(--space-2);
+}
+
+// Nested so it outranks Price's own size class regardless of CSS order.
+.buy .price {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-variant-numeric: lining-nums tabular-nums; // the serif defaults to old-style figures
+  @include text(lg);
+}
+
+.quickAdd {
+  position: relative;
+  z-index: 1; // above the card's full-size link overlay
 }

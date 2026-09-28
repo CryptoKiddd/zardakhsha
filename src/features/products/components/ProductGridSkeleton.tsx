@@ -9,6 +9,7 @@ export function ProductGridSkeleton({ count = 4, carousel = false }: { count?: n
           <span className={s.image} />
           <span className={s.line} />
           <span className={s.lineShort} />
+          <span className={s.lineButton} />
         </li>
       ))}
     </ul>

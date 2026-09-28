@@ -7,23 +7,41 @@
 
   @include up(md) {
     grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-4);
   }
   @include up(lg) {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
 }
 
+// Mirrors ProductGrid.module.scss .slide widths.
 .carousel {
   @include scroll-row;
 
   .card {
-    width: 44%;
+    width: 66%;
+
+    @include up(sm) {
+      width: 44%;
+    }
+    @include up(md) {
+      width: 28%;
+    }
+    @include up(lg) {
+      width: 22%;
+    }
   }
 }
 
+// Mirrors ProductCard: 4:5 image on top, padded body below.
 .card {
   display: grid;
   gap: var(--space-2);
+  padding-bottom: var(--space-4);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
 }
 
 %shimmer {
@@ -37,18 +55,26 @@
 .image {
   @extend %shimmer;
   aspect-ratio: 4 / 5;
-  border-radius: var(--radius-md);
+  border-radius: 0;
+  margin-bottom: var(--space-2);
 }
 
-.line {
+.line,
+.lineShort,
+.lineButton {
   @extend %shimmer;
   height: 14px;
+  margin-inline: var(--space-3);
 }
 
 .lineShort {
-  @extend %shimmer;
-  height: 14px;
   width: 50%;
+}
+
+.lineButton {
+  width: var(--tap-min);
+  height: var(--tap-min);
+  justify-self: end;
 }
 
 @keyframes shimmer {
