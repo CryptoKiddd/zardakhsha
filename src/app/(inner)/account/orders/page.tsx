@@ -1,18 +1,13 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { ButtonLink, Container } from "@/components/ui";
+import { routes } from "@/config/navigation";
+import { isOrderStatus, STATUS_LABEL } from "@/config/order-status";
 import s from "@/features/account/components/AccountPage.module.scss";
 import { getOrders, requireUser } from "@/features/account/queries";
 import { formatDate, formatPrice } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Orders" };
-
-const STATUS: Record<string, string> = {
-  pending_payment: "Awaiting payment",
-  paid: "Placed",
-  shipped: "Shipped",
-  delivered: "Delivered",
-  cancelled: "Cancelled",
-};
 
 export default async function OrdersPage() {
   const user = await requireUser("/account/orders");
@@ -31,14 +26,16 @@ export default async function OrdersPage() {
           {orders.map((o) => (
             <li key={o.id} className={s.row}>
               <span>
-                <strong>{o.number}</strong>
+                <Link href={routes.order(o.number)}>
+                  <strong>{o.number}</strong>
+                </Link>
                 <span className={s.muted}>
                   {formatDate(o.createdAt)} · {o.itemCount} items
                 </span>
               </span>
               <span>
                 <strong>{formatPrice(o.total)}</strong>
-                <span className={s.muted}>{STATUS[o.status] ?? o.status}</span>
+                <span className={s.muted}>{isOrderStatus(o.status) ? STATUS_LABEL[o.status] : o.status}</span>
               </span>
             </li>
           ))}

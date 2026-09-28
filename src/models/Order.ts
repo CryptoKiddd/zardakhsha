@@ -1,6 +1,8 @@
 import { Schema, model, models, type InferSchemaType, type Model, type Types } from "mongoose";
+// Relative import so scripts (tsx) can load models without path aliases.
+import { ORDER_STATUSES } from "../config/order-status";
 
-export const ORDER_STATUSES = ["pending_payment", "paid", "shipped", "delivered", "cancelled"] as const;
+export { ORDER_STATUSES };
 
 /** Snapshot of the line at purchase time: later product edits never change past orders. */
 const orderLineSchema = new Schema(
@@ -35,6 +37,17 @@ const orderSchema = new Schema(
       notes: String,
     },
     status: { type: String, enum: ORDER_STATUSES, default: "pending_payment", index: true },
+    /** Every status the order has been in, oldest first: drives the customer's timeline. */
+    statusHistory: {
+      type: [
+        {
+          _id: false,
+          status: { type: String, enum: ORDER_STATUSES, required: true },
+          at: { type: Date, required: true },
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true },
 );

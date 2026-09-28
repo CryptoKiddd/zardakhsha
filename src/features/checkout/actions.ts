@@ -5,6 +5,7 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { routes } from "@/config/navigation";
 import { CART_COOKIE, FREE_SHIPPING_THRESHOLD, LAST_ORDER_COOKIE, SHIPPING_FEE } from "@/config/shop";
 import { addressSchema, fieldErrors, type AddressInput, type FieldErrors } from "@/features/account/schemas";
 import { getCart } from "@/features/cart/queries";
@@ -68,10 +69,13 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
     shipping,
     total: cart.subtotal + shipping,
     shippingAddress: address,
+    status: "pending_payment",
+    statusHistory: [{ status: "pending_payment", at: new Date() }],
   });
 
   // TODO(payments): create a payment session with the chosen provider (e.g. BOG / TBC)
-  // here and redirect to it instead; mark the order "paid" from the provider webhook.
+  // here and redirect to it instead; the provider webhook then moves the order
+  // pending_payment → paid (see config/order-status.ts, same guard as scripts/order-status.ts).
 
   const cartId = (await cookies()).get(CART_COOKIE)?.value;
   if (cartId) await Cart.deleteOne({ cartId });
@@ -81,5 +85,5 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
   jar.set(LAST_ORDER_COOKIE, number, { httpOnly: true, sameSite: "lax", path: "/order", maxAge: 60 * 60 * 24 });
   revalidatePath("/", "layout");
 
-  redirect(`/order/${number}`);
+  redirect(routes.order(number));
 }

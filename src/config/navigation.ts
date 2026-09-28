@@ -17,6 +17,7 @@ export const routes = {
   product: (slug: string) => `/product/${slug}` as Route,
   reviews: (slug: string, filter?: string) =>
     (filter ? `/product/${slug}/reviews?filter=${filter}` : `/product/${slug}/reviews`) as Route,
+  order: (number: string) => `/order/${encodeURIComponent(number)}` as Route,
   search: (q: string, category?: string) => {
     const qs = new URLSearchParams();
     if (q) qs.set("q", q);

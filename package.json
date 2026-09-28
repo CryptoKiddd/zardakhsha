@@ -11,7 +11,8 @@
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "check": "npm run typecheck && npm run lint && npm run format:check",
-    "seed": "tsx --env-file=.env.local scripts/seed.ts"
+    "seed": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/seed.ts",
+    "order:status": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/order-status.ts"
   },
   "dependencies": {
     "better-auth": "^1.7.6",
