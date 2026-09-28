@@ -1,6 +1,7 @@
 @use "abstracts" as *;
 @use "base/tokens";
 @use "base/reset";
+@use "base/view-transitions";
 
 body {
   background: var(--color-bg);

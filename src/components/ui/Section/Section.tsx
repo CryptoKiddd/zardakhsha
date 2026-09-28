@@ -38,6 +38,10 @@ export function Section({
 }
 
 /** Horizontal page padding + max width. Every page body sits inside one. */
-export function Container({ children, className }: { children: React.ReactNode; className?: string }) {
-  return <div className={clsx(s.container, className)}>{children}</div>;
+export function Container({ children, className, ...rest }: React.ComponentProps<"div">) {
+  return (
+    <div className={clsx(s.container, className)} {...rest}>
+      {children}
+    </div>
+  );
 }

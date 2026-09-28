@@ -13,6 +13,26 @@
   }
 }
 
+// Sections rise in one after another on open, like the hero slide text.
+@media (prefers-reduced-motion: no-preference) {
+  .page > * {
+    animation: rise 600ms var(--ease-out) both;
+  }
+
+  @for $i from 2 through 8 {
+    .page > :nth-child(#{$i}) {
+      animation-delay: #{120 + ($i - 2) * 70}ms;
+    }
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(18px);
+  }
+}
+
 .categories {
   @include scroll-row(var(--space-2));
 }
