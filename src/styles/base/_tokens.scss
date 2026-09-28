@@ -7,6 +7,7 @@
   // Color
   --color-bg: #faf7f2;
   --color-surface: #ffffff;
+  --color-surface-alt: #f3eee6; // tinted panels (story, newsletter, icon tiles)
   --color-text: #1c1b1f;
   --color-muted: #6b6770;
   --color-border: #e8e3dc;
@@ -17,6 +18,7 @@
   --color-success: #2e7d32;
   --color-silver: #c0c0c0;
   --color-gold: #c9a45c;
+  --color-gold-text: #775a19; // gold that passes contrast on light backgrounds (eyebrows, text links)
   --color-overlay: rgb(28 27 31 / 0.45);
 
   // Typography (font families are injected by next/font in app/layout.tsx)

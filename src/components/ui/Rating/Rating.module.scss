@@ -15,3 +15,8 @@
   @include text(xs);
   color: var(--color-muted);
 }
+
+.value {
+  @include text(xs);
+  font-weight: 600;
+}

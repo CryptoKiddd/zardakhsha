@@ -6,13 +6,33 @@ export function Rating({
   value,
   count,
   size = 14,
+  compact = false,
   className,
 }: {
   value: number;
   count?: number;
   size?: number;
+  /** One star + "4.9 (128)": for cards where five stars are too wide. */
+  compact?: boolean;
   className?: string;
 }) {
+  if (compact) {
+    return (
+      <span className={clsx(s.rating, className)}>
+        <span className={s.stars} aria-hidden>
+          <Icon name="star" size={size} filled />
+        </span>
+        <span className="visually-hidden">
+          Rated {value.toFixed(1)} out of 5{count != null ? `, ${count} reviews` : ""}
+        </span>
+        <span className={s.value} aria-hidden>
+          {value.toFixed(1)}
+          {count != null && <span className={s.count}> ({count})</span>}
+        </span>
+      </span>
+    );
+  }
+
   const rounded = Math.round(value * 2) / 2;
   return (
     <span className={clsx(s.rating, className)}>
