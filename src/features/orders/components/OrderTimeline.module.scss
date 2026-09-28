@@ -1,0 +1,105 @@
+@use "abstracts" as *;
+
+.timeline {
+  display: grid;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  grid-template-columns: 32px minmax(0, 1fr);
+  gap: var(--space-3);
+  padding-bottom: var(--space-5);
+
+  // Connector line between markers.
+  &:not(:last-child)::before {
+    content: "";
+    position: absolute;
+    top: 32px;
+    bottom: 0;
+    left: 15.5px;
+    width: 1px;
+    background: var(--color-border);
+  }
+
+  &:last-child {
+    padding-bottom: 0;
+  }
+}
+
+.done:not(:last-child)::before {
+  background: var(--color-gold);
+}
+
+.marker {
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--color-border);
+  background: var(--color-surface);
+  color: var(--color-muted);
+
+  .done & {
+    border-color: var(--color-text);
+    background: var(--color-text);
+    color: var(--color-bg);
+  }
+
+  .current & {
+    border-color: var(--color-gold);
+    background: var(--color-gold);
+    color: var(--color-text);
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--color-gold) 25%, transparent);
+  }
+}
+
+.body {
+  display: grid;
+  gap: 2px;
+  padding-top: var(--space-1);
+
+  .upcoming & {
+    opacity: 0.55;
+  }
+}
+
+.title {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 600;
+  @include text(md);
+}
+
+.tag {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  @include text(xs);
+  font-weight: 600;
+  color: var(--color-gold-text);
+}
+
+.text {
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.time {
+  @include text(xs);
+  color: var(--color-muted);
+}
+
+.cancelled {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  @include text(sm);
+  color: var(--color-sale);
+}

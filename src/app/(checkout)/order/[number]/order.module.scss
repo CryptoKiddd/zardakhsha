@@ -2,24 +2,213 @@
 
 .page {
   display: grid;
-  justify-items: center;
   gap: var(--space-4);
-  max-width: 480px;
-  padding-block: var(--space-7);
+  max-width: 640px;
+  padding-block: var(--space-5) var(--space-7);
+}
+
+.card,
+.hero {
+  padding: var(--space-5) var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+
+  @include up(md) {
+    padding: var(--space-6);
+  }
+}
+
+// ── Confirmation ────────────────────────────────────────────
+.hero {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-2);
   text-align: center;
 }
 
-.check {
+.badge {
   display: grid;
   place-items: center;
   width: 64px;
   height: 64px;
-  border-radius: 50%;
-  background: var(--color-success);
-  color: #fff;
+  margin-bottom: var(--space-2);
+  border-radius: var(--radius-md);
+  background: var(--color-gold);
+  color: var(--color-text);
 }
 
-.total {
-  @include heading(lg);
-  margin-bottom: var(--space-3);
+.eyebrow {
+  @include eyebrow;
+  font-weight: 600;
+}
+
+.title {
+  @include heading(2xl);
+}
+
+.lead {
+  @include text(sm);
+  color: var(--color-muted);
+
+  strong {
+    color: var(--color-text);
+    font-weight: 600;
+    overflow-wrap: anywhere;
+  }
+}
+
+.reference {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+  padding-left: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+}
+
+.refLabel {
+  @include eyebrow;
+  color: var(--color-muted);
+}
+
+.refNumber {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: 0.04em;
+}
+
+// ── Cards ───────────────────────────────────────────────────
+.card {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.cardHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.cardTitle {
+  @include heading(xl);
+}
+
+.status,
+.count {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  @include text(xs);
+  font-weight: 600;
+  color: var(--color-gold-text);
+  white-space: nowrap;
+}
+
+.lines {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.line {
+  display: grid;
+  grid-template-columns: 56px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-surface-alt);
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.lineInfo {
+  display: grid;
+  min-width: 0;
+}
+
+.lineName {
+  font-weight: 600;
+  @include text(sm);
+  @include line-clamp(1);
+}
+
+.muted {
+  @include text(xs);
+  color: var(--color-muted);
+}
+
+.linePrice {
+  font-weight: 600;
+  @include text(sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.totals {
+  display: grid;
+  gap: var(--space-2);
+  padding: var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  @include text(sm);
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  dt {
+    color: var(--color-muted);
+  }
+}
+
+.grand {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+  @include text(md);
+  font-weight: 700;
+
+  dt {
+    color: var(--color-text);
+  }
+}
+
+.address {
+  display: flex;
+  gap: var(--space-2);
+  @include text(sm);
+  color: var(--color-muted);
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-gold-text);
+  }
+}
+
+// ── Actions ─────────────────────────────────────────────────
+.actions {
+  display: grid;
+  gap: var(--space-3);
+  margin-top: var(--space-2);
+}
+
+.help {
+  @include text(sm);
+  color: var(--color-muted);
+  text-align: center;
+
+  a {
+    color: var(--color-gold-text);
+    font-weight: 600;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
 }
