@@ -1,0 +1,84 @@
+// ─────────────────────────────────────────────────────────────
+// DESIGN TOKENS: the single source of truth for the UI.
+// Mirrors the Stitch/Figma design system. If the design changes,
+// change it HERE, never inline in a component.
+// ─────────────────────────────────────────────────────────────
+:root {
+  // Color
+  --color-bg: #faf7f2;
+  --color-surface: #ffffff;
+  --color-text: #1c1b1f;
+  --color-muted: #6b6770;
+  --color-border: #e8e3dc;
+  --color-accent: #1f3a93;
+  --color-accent-contrast: #ffffff;
+  --color-accent-hover: #182e75;
+  --color-sale: #b3261e;
+  --color-success: #2e7d32;
+  --color-silver: #c0c0c0;
+  --color-gold: #c9a45c;
+  --color-overlay: rgb(28 27 31 / 0.45);
+
+  // Typography (font families are injected by next/font in app/layout.tsx)
+  --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
+  --font-sans: var(--font-inter), Inter, system-ui, -apple-system, sans-serif;
+
+  --text-xs: 0.75rem; // 12
+  --leading-xs: 1rem;
+  --text-sm: 0.875rem; // 14
+  --leading-sm: 1.25rem;
+  --text-md: 1rem; // 16
+  --leading-md: 1.5rem;
+  --text-lg: 1.25rem; // 20
+  --leading-lg: 1.75rem;
+  --text-xl: 1.5rem; // 24
+  --leading-xl: 2rem;
+  --text-2xl: 2rem; // 32
+  --leading-2xl: 2.5rem;
+
+  // Spacing: 8px grid (4px half-step allowed)
+  --space-1: 0.25rem; // 4
+  --space-2: 0.5rem; // 8
+  --space-3: 0.75rem; // 12
+  --space-4: 1rem; // 16
+  --space-5: 1.5rem; // 24
+  --space-6: 2rem; // 32
+  --space-7: 3rem; // 48
+  --space-8: 4rem; // 64
+  --gutter: var(--space-4);
+
+  // Radius
+  --radius-sm: 6px;
+  --radius-md: 12px; // cards
+  --radius-pill: 999px;
+
+  // Elevation
+  --shadow-sm: 0 1px 2px rgb(28 27 31 / 0.06);
+  --shadow-md: 0 6px 20px rgb(28 27 31 / 0.08);
+
+  // Layout
+  --header-h: 56px;
+  --announcement-h: 32px;
+  --action-bar-h: 72px;
+  --tap-min: 44px;
+  --container-max: 1280px;
+
+  // Motion
+  --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+
+  // Z-index scale (never use raw z-index numbers in components)
+  --z-sticky: 10;
+  --z-header: 20;
+  --z-action-bar: 30;
+  --z-overlay: 40;
+  --z-drawer: 50;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur-base: 0ms;
+  }
+}

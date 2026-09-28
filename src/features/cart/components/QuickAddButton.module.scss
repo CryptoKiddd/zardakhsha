@@ -1,0 +1,10 @@
+@use "abstracts" as *;
+
+.form {
+  display: contents;
+}
+
+.button {
+  background: var(--color-surface);
+  box-shadow: var(--shadow-sm);
+}

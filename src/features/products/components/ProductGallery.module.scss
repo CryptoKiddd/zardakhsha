@@ -1,0 +1,87 @@
+@use "abstracts" as *;
+
+.gallery {
+  position: relative;
+  margin-inline: calc(var(--gutter) * -1);
+
+  @include up(lg) {
+    margin-inline: 0;
+  }
+}
+
+.track {
+  display: flex;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  overscroll-behavior-x: contain;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  @include up(lg) {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-2);
+    overflow: visible;
+  }
+}
+
+.slide {
+  position: relative;
+  flex: 0 0 100%;
+  aspect-ratio: 4 / 5;
+  scroll-snap-align: start;
+  background: var(--color-surface);
+
+  @include up(lg) {
+    border-radius: var(--radius-md);
+    overflow: hidden;
+
+    &:first-child {
+      grid-column: 1 / -1;
+    }
+  }
+}
+
+.image {
+  object-fit: cover;
+}
+
+.dots {
+  position: absolute;
+  inset: auto 0 var(--space-3);
+  display: flex;
+  justify-content: center;
+  gap: var(--space-1);
+
+  @include up(lg) {
+    display: none;
+  }
+}
+
+.dot {
+  // 24px tap area, 6px visible dot
+  width: 24px;
+  height: 24px;
+  display: grid;
+  place-items: center;
+
+  &::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.6);
+    transition:
+      width var(--dur-fast) var(--ease-out),
+      background-color var(--dur-fast);
+  }
+
+  &[aria-current="true"]::before {
+    width: 16px;
+    border-radius: var(--radius-pill);
+    background: #fff;
+  }
+}

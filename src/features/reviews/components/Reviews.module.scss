@@ -1,0 +1,166 @@
+@use "abstracts" as *;
+
+.muted {
+  @include text(xs);
+  color: var(--color-muted);
+}
+
+// Summary
+.summary {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: var(--space-3) var(--space-5);
+  align-items: center;
+  padding: var(--space-5);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.score {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-1);
+}
+
+.big {
+  @include heading(2xl);
+  font-size: 3rem;
+  line-height: 1;
+}
+
+.bars {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.barRow {
+  display: grid;
+  grid-template-columns: 24px 1fr 24px;
+  gap: var(--space-2);
+  align-items: center;
+  @include text(xs);
+}
+
+.meter {
+  width: 100%;
+  height: 6px;
+  appearance: none;
+
+  &::-webkit-meter-bar {
+    background: var(--color-border);
+    border: 0;
+    border-radius: var(--radius-pill);
+    height: 6px;
+  }
+  &::-webkit-meter-optimum-value {
+    background: var(--color-gold);
+    border-radius: var(--radius-pill);
+  }
+  &::-moz-meter-bar {
+    background: var(--color-gold);
+  }
+}
+
+.recommend {
+  grid-column: 1 / -1;
+  @include text(sm);
+}
+
+// Card
+.card {
+  display: grid;
+  gap: var(--space-2);
+  padding-block: var(--space-5);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.cardHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.author {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  font-weight: 500;
+}
+
+.body {
+  @include text(sm);
+}
+
+.photos {
+  @include scroll-row(var(--space-2));
+}
+
+.photo {
+  position: relative;
+  width: 80px;
+  aspect-ratio: 1;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+
+  img {
+    object-fit: cover;
+  }
+}
+
+// Form
+.form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.label {
+  display: grid;
+  gap: var(--space-2);
+  @include text(sm);
+  font-weight: 500;
+}
+
+.starPicker {
+  border: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1);
+  color: var(--color-gold);
+
+  legend {
+    margin-bottom: var(--space-2);
+    color: var(--color-text);
+  }
+
+  button {
+    @include tap-target;
+  }
+}
+
+.select,
+.textarea {
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-size: var(--text-md);
+  font-weight: 400;
+}
+
+.textarea {
+  resize: vertical;
+}
+
+.error {
+  @include text(xs);
+  color: var(--color-sale);
+  width: 100%;
+}
+
+.success {
+  @include heading(lg);
+  text-align: center;
+  padding-block: var(--space-6);
+}

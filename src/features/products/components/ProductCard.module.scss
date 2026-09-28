@@ -1,0 +1,77 @@
+@use "abstracts" as *;
+
+.card {
+  position: relative;
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.media {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface);
+}
+
+.image,
+.hoverImage {
+  object-fit: cover;
+  transition: opacity var(--dur-base) var(--ease-out);
+}
+
+.hoverImage {
+  opacity: 0;
+}
+
+@media (hover: hover) {
+  .card:hover .hoverImage {
+    opacity: 1;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: var(--space-2);
+  left: var(--space-2);
+}
+
+.badge,
+.quickAdd {
+  z-index: 1; // above the card's full-size link overlay
+}
+
+.quickAdd {
+  position: absolute;
+  right: var(--space-2);
+  bottom: var(--space-2);
+}
+
+.body {
+  display: grid;
+  gap: 2px;
+}
+
+.name {
+  font-family: var(--font-sans);
+  font-weight: 400;
+  @include text(sm);
+  @include line-clamp(2);
+}
+
+// Whole card is clickable via the title link's pseudo-element (one tab stop, good for a11y).
+.nameLink::after {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  aspect-ratio: 4 / 5;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  min-height: 16px;
+}

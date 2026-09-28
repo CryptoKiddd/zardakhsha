@@ -1,0 +1,41 @@
+@use "abstracts" as *;
+
+// Sticks directly BELOW the header, never over it.
+.toolbar {
+  position: sticky;
+  top: var(--header-h);
+  z-index: var(--z-sticky);
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-3);
+  margin-inline: calc(var(--gutter) * -1);
+  padding-inline: var(--gutter);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.chips {
+  @include scroll-row(var(--space-2));
+  flex: 1;
+  min-width: 0;
+  margin-inline: 0;
+  padding-inline: 0;
+}
+
+.sort {
+  flex-shrink: 0;
+
+  select {
+    min-height: 36px;
+    padding-inline: var(--space-3);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface);
+    @include text(sm);
+  }
+
+  &[data-pending] select {
+    opacity: 0.6;
+  }
+}

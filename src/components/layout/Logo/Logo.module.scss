@@ -1,0 +1,26 @@
+@use "abstracts" as *;
+
+.logo {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1;
+}
+
+.wordmark {
+  font-family: var(--font-serif);
+  font-size: var(--text-lg);
+  font-weight: 500;
+  letter-spacing: 0.18em;
+  // Optical centering: letter-spacing adds trailing space after the last letter.
+  margin-right: -0.18em;
+}
+
+.sub {
+  margin-top: 3px;
+  font-family: var(--font-sans);
+  font-size: 9px;
+  letter-spacing: 3px;
+  margin-right: -3px;
+  color: var(--color-muted);
+}

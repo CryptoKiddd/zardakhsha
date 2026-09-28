@@ -1,0 +1,48 @@
+@use "abstracts" as *;
+
+.form {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.fields {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.twoCol {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3);
+}
+
+.toggle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  @include text(sm);
+
+  input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--color-accent);
+  }
+}
+
+.success,
+.error {
+  @include text(sm);
+
+  &:empty {
+    display: none;
+  }
+}
+
+.success {
+  color: var(--color-success);
+}
+
+.error {
+  color: var(--color-sale);
+}

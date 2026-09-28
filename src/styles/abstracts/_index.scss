@@ -1,0 +1,4 @@
+// Import in every CSS module:  @use "abstracts" as *;
+// Emits no CSS — only mixins and functions.
+@forward "breakpoints";
+@forward "mixins";

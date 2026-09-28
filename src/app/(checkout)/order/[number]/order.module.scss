@@ -1,0 +1,25 @@
+@use "abstracts" as *;
+
+.page {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-4);
+  max-width: 480px;
+  padding-block: var(--space-7);
+  text-align: center;
+}
+
+.check {
+  display: grid;
+  place-items: center;
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-success);
+  color: #fff;
+}
+
+.total {
+  @include heading(lg);
+  margin-bottom: var(--space-3);
+}

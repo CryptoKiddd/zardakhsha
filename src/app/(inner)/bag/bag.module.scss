@@ -1,0 +1,21 @@
+@use "abstracts" as *;
+
+.page {
+  display: grid;
+  gap: var(--space-5);
+  padding-block: var(--space-5);
+  max-width: 720px;
+}
+
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: var(--space-3);
+  padding-block: var(--space-8);
+  text-align: center;
+
+  p {
+    color: var(--color-muted);
+    margin-bottom: var(--space-3);
+  }
+}

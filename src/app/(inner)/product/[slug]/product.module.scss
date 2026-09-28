@@ -1,0 +1,51 @@
+@use "abstracts" as *;
+
+.layout {
+  display: grid;
+  gap: var(--space-5);
+
+  @include up(lg) {
+    grid-template-columns: 1.2fr 1fr;
+    gap: var(--space-7);
+    padding-top: var(--space-5);
+    align-items: start;
+  }
+}
+
+.info {
+  display: grid;
+  gap: var(--space-5);
+
+  @include up(lg) {
+    position: sticky;
+    top: calc(var(--header-h) + var(--space-5));
+  }
+}
+
+.titleBlock {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.title {
+  @include heading(2xl);
+}
+
+.ratingLink {
+  justify-self: start;
+  min-height: var(--tap-min);
+  display: inline-flex;
+  align-items: center;
+}
+
+.delivery {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.muted {
+  color: var(--color-muted);
+}

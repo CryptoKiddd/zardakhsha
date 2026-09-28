@@ -1,0 +1,36 @@
+@use "abstracts" as *;
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5) var(--space-3);
+
+  @include up(md) {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--space-6) var(--space-4);
+  }
+
+  @include up(lg) {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+.fullRow {
+  grid-column: 1 / -1;
+}
+
+.carousel {
+  @include scroll-row;
+}
+
+.slide {
+  width: 44%;
+
+  @include up(md) {
+    width: 28%;
+  }
+
+  @include up(lg) {
+    width: 22%;
+  }
+}

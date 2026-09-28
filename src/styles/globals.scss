@@ -1,0 +1,38 @@
+@use "abstracts" as *;
+@use "base/tokens";
+@use "base/reset";
+
+body {
+  background: var(--color-bg);
+  color: var(--color-text);
+  font-family: var(--font-sans);
+  @include text(md);
+}
+
+h1 {
+  @include heading(2xl);
+}
+h2 {
+  @include heading(xl);
+}
+h3 {
+  @include heading(lg);
+}
+
+:focus-visible {
+  @include focus-ring;
+}
+
+::selection {
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+}
+
+// Stop background scroll while a drawer/sheet is open.
+body:has(dialog[open]) {
+  overflow: hidden;
+}
+
+.visually-hidden {
+  @include visually-hidden;
+}

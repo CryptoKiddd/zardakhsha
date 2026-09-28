@@ -1,0 +1,51 @@
+@use "abstracts" as *;
+
+// Page-level styles shared by all /account pages (dashboard in (main), sub-pages in (inner)).
+.page {
+  display: grid;
+  gap: var(--space-4);
+  padding-block: var(--space-5) var(--space-7);
+  max-width: 640px;
+}
+
+.muted {
+  display: block;
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.cards {
+  display: grid;
+  gap: var(--space-3);
+  margin-block: var(--space-4);
+}
+
+.card {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.chevron {
+  color: var(--color-muted);
+}
+
+.list {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}

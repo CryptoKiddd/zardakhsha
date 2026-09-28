@@ -1,0 +1,13 @@
+@use "abstracts" as *;
+
+.bar {
+  display: grid;
+  place-items: center;
+  height: var(--announcement-h);
+  padding-inline: var(--gutter);
+  background: var(--color-text);
+  color: var(--color-bg);
+  @include text(xs);
+  letter-spacing: 0.04em;
+  text-align: center;
+}

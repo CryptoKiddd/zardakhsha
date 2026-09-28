@@ -1,0 +1,28 @@
+@use "abstracts" as *;
+
+.link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--tap-min);
+
+  &[aria-current="page"] {
+    color: var(--color-accent);
+  }
+}
+
+.large .link {
+  @include heading(lg);
+  min-height: 52px;
+}
+
+.small .link {
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.divider {
+  border: 0;
+  border-top: 1px solid var(--color-border);
+  margin-block: var(--space-3);
+}

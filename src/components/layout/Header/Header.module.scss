@@ -1,0 +1,52 @@
+@use "abstracts" as *;
+
+.header {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+// Fixed 3-zone grid: side zones are equal width, so the logo is ALWAYS
+// optically centered no matter how many icons each side has. Nothing wraps.
+.inner {
+  display: grid;
+  grid-template-columns: 96px 1fr 96px;
+  align-items: center;
+  height: var(--header-h);
+  max-width: var(--container-max);
+  margin-inline: auto;
+  padding-inline: var(--space-1);
+
+  @include up(md) {
+    grid-template-columns: 160px 1fr 160px;
+    padding-inline: var(--space-4);
+  }
+}
+
+.start,
+.end {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+}
+
+.end {
+  justify-content: flex-end;
+}
+
+.center {
+  display: flex;
+  justify-content: center;
+  min-width: 0;
+}
+
+.secure {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding-right: var(--space-3);
+  @include text(xs);
+  color: var(--color-muted);
+}

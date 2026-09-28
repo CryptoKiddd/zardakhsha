@@ -1,0 +1,93 @@
+@use "abstracts" as *;
+
+.purchase {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.group {
+  border: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.legend,
+.legendRow {
+  @include text(sm);
+  color: var(--color-muted);
+  padding: 0;
+  margin-bottom: var(--space-3);
+
+  strong {
+    color: var(--color-text);
+    font-weight: 500;
+  }
+}
+
+.legendRow {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.swatchButton {
+  @include tap-target;
+  border-radius: 50%;
+}
+
+.link {
+  @include text(sm);
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.lowStock {
+  @include text(sm);
+  color: var(--color-sale);
+}
+
+.status:empty,
+.error:empty {
+  display: none;
+}
+
+.error {
+  @include text(sm);
+  color: var(--color-sale);
+}
+
+.status {
+  @include text(sm);
+  color: var(--color-success);
+}
+
+.barPrice {
+  flex-shrink: 0;
+}
+
+.guide {
+  @include text(sm);
+  color: var(--color-muted);
+  margin-bottom: var(--space-4);
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  @include text(sm);
+
+  th,
+  td {
+    text-align: left;
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+}

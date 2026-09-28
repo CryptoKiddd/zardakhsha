@@ -1,0 +1,17 @@
+@use "abstracts" as *;
+
+.page {
+  display: grid;
+  gap: var(--space-5);
+  padding-block: var(--space-5);
+  max-width: 760px;
+}
+
+.muted {
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.filters {
+  @include scroll-row(var(--space-2));
+}

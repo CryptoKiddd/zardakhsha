@@ -1,0 +1,17 @@
+@use "abstracts" as *;
+
+.rating {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.stars {
+  display: inline-flex;
+  color: var(--color-gold);
+}
+
+.count {
+  @include text(xs);
+  color: var(--color-muted);
+}

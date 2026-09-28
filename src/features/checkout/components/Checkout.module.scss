@@ -1,0 +1,92 @@
+@use "abstracts" as *;
+
+.form {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.step {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.stepTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  @include heading(lg);
+}
+
+.num {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: var(--color-text);
+  color: var(--color-bg);
+  font-family: var(--font-sans);
+  @include text(sm);
+}
+
+.note {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.error {
+  @include text(sm);
+  color: var(--color-sale);
+}
+
+.summary {
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.summaryToggle {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-height: var(--tap-min);
+  cursor: pointer;
+  list-style: none;
+
+  &::-webkit-details-marker {
+    display: none;
+  }
+}
+
+.rows {
+  display: grid;
+  gap: var(--space-2);
+  @include text(sm);
+
+  details & {
+    margin-top: var(--space-3);
+  }
+
+  > div {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  dt {
+    color: var(--color-muted);
+  }
+}
+
+.total {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--color-border);
+  @include text(md);
+  font-weight: 600;
+
+  dt {
+    color: var(--color-text);
+  }
+}
