@@ -4,22 +4,26 @@
 // change it HERE, never inline in a component.
 // ─────────────────────────────────────────────────────────────
 :root {
-  // Color
-  --color-bg: #faf7f2;
+  --color-bg: #f7f8fa;
   --color-surface: #ffffff;
-  --color-surface-alt: #f3eee6; // tinted panels (story, newsletter, icon tiles)
-  --color-text: #1c1b1f;
-  --color-muted: #6b6770;
-  --color-border: #e8e3dc;
-  --color-accent: #1f3a93;
+  --color-surface-alt: #f0f2f5;
+
+  --color-text: #111827;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
+
+  --color-accent: #111827;
   --color-accent-contrast: #ffffff;
-  --color-accent-hover: #182e75;
-  --color-sale: #b3261e;
-  --color-success: #2e7d32;
-  --color-silver: #c0c0c0;
-  --color-gold: #c9a45c;
-  --color-gold-text: #775a19; // gold that passes contrast on light backgrounds (eyebrows, text links)
-  --color-overlay: rgb(28 27 31 / 0.45);
+  --color-accent-hover: #1f2937;
+
+  --color-sale: #ef4444;
+  --color-success: #22c55e;
+
+  --color-silver: #a8adb7;
+  --color-gold: #c5a24a;
+  --color-gold-text: #80651f;
+
+  --color-overlay: rgb(17 24 39 / 0.5);
 
   // Typography (font families are injected by next/font in app/layout.tsx)
   --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
