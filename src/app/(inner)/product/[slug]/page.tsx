@@ -12,6 +12,7 @@ import { ProductPurchase } from "@/features/products/components/ProductPurchase"
 import { getCompleteTheLook, getProductBySlug, getRelated } from "@/features/products/queries";
 import type { ProductDetailDTO } from "@/features/products/types";
 import { ReviewCard } from "@/features/reviews/components/ReviewCard";
+import { getWishlistIds } from "@/features/wishlist/queries";
 import { ReviewSummary } from "@/features/reviews/components/ReviewSummary";
 import { getReviews, getReviewSummary } from "@/features/reviews/queries";
 import s from "./product.module.scss";
@@ -28,7 +29,7 @@ export async function generateMetadata({ params }: PageProps<"/product/[slug]">)
 
 export default async function ProductPage({ params }: PageProps<"/product/[slug]">) {
   const { slug } = await params;
-  const product = await getProductBySlug(slug);
+  const [product, savedIds] = await Promise.all([getProductBySlug(slug), getWishlistIds()]);
   if (!product) notFound();
 
   return (
@@ -47,7 +48,7 @@ export default async function ProductPage({ params }: PageProps<"/product/[slug]
               )}
             </div>
 
-            <ProductPurchase product={product} />
+            <ProductPurchase product={product} saved={savedIds.includes(product.id)} />
 
             <p className={s.delivery}>
               <Icon name="truck" size={20} /> Free delivery over ₾150 · Ships in 1–2 business days

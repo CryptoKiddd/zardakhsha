@@ -5,53 +5,42 @@
   gap: var(--space-5);
 }
 
-.group {
-  border: 0;
-  padding: 0;
-  display: grid;
-  gap: var(--space-3);
-}
-
-.legend,
-.legendRow {
-  @include text(sm);
-  color: var(--color-muted);
-  padding: 0;
-  margin-bottom: var(--space-3);
-
-  strong {
-    color: var(--color-text);
-    font-weight: 500;
-  }
-}
-
-.legendRow {
-  display: flex;
-  justify-content: space-between;
-  width: 100%;
-}
-
-.options {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-2);
-}
-
-.swatchButton {
-  @include tap-target;
-  border-radius: 50%;
-}
-
-.link {
-  @include text(sm);
-  color: var(--color-text);
-  text-decoration: underline;
-  text-underline-offset: 3px;
+// Nested so it outranks Price's own size class regardless of CSS order.
+.purchase .price {
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-size: var(--text-2xl);
+  line-height: var(--leading-2xl);
+  font-variant-numeric: lining-nums tabular-nums;
 }
 
 .lowStock {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-gold) 16%, var(--color-surface));
   @include text(sm);
-  color: var(--color-sale);
+  font-weight: 500;
+  color: var(--color-gold-text);
+}
+
+.pulse {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-gold);
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    box-shadow: 0 0 0 6px color-mix(in srgb, var(--color-gold) 25%, transparent);
+  }
 }
 
 .status:empty,
@@ -71,23 +60,63 @@
 
 .barPrice {
   flex-shrink: 0;
+  font-weight: 700;
 }
 
-.guide {
-  @include text(sm);
-  color: var(--color-muted);
-  margin-bottom: var(--space-4);
+// ── Size sheet ──────────────────────────────────────────────
+.sizeSheet {
+  display: grid;
+  gap: var(--space-5);
 }
 
-.table {
-  width: 100%;
-  border-collapse: collapse;
-  @include text(sm);
+.measure {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-alt);
+}
 
-  th,
-  td {
-    text-align: left;
-    padding: var(--space-2) 0;
-    border-bottom: 1px solid var(--color-border);
+.measureTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  @include heading(lg);
+
+  svg {
+    color: var(--color-gold-text);
   }
+}
+
+.steps {
+  display: grid;
+  gap: var(--space-3);
+  counter-reset: step;
+
+  li {
+    display: grid;
+    grid-template-columns: 28px 1fr;
+    gap: var(--space-3);
+    align-items: start;
+    counter-increment: step;
+    @include text(sm);
+
+    &::before {
+      content: counter(step);
+      display: grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--gradient-gold);
+      color: var(--color-text);
+      font-weight: 700;
+      @include text(xs);
+    }
+  }
+}
+
+.measureNote {
+  @include text(xs);
+  color: var(--color-muted);
 }
