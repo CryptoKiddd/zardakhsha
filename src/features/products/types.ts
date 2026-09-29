@@ -29,14 +29,16 @@ export type ProductCardDTO = {
   colors: { name: string; hex: string }[];
   badges: string[];
   rating: { average: number; count: number };
-  /** SKU used by the card's quick-add button (first in-stock variant). */
+  /** All buyable combinations, so a card's "+" can ask for metal/colour/size without another request. */
+  variants: VariantDTO[];
+  /** Set only when there is exactly one option to buy: then "+" adds it directly instead of asking. */
   quickAddSku?: string;
+  soldOut: boolean;
 };
 
 export type ProductDetailDTO = ProductCardDTO & {
   description: string;
   images: { url: string; alt: string }[];
-  variants: VariantDTO[];
   materials: string;
   care: string;
 };

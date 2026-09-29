@@ -42,7 +42,11 @@ export function toProductCard(p: LeanProduct): ProductCardDTO {
     colors,
     badges: [...p.badges],
     rating: { average: p.rating?.average ?? 0, count: p.rating?.count ?? 0 },
-    quickAddSku: vs.find((v) => v.stock > 0 && !v.size)?.sku,
+    variants: vs,
+    // One option only → add straight away. Any choice (metal, colour, size) → the card asks first,
+    // so nobody gets a colour they didn't pick.
+    quickAddSku: vs.length === 1 && vs[0]!.stock > 0 ? vs[0]!.sku : undefined,
+    soldOut: vs.every((v) => v.stock === 0),
   };
 }
 
@@ -51,7 +55,6 @@ export function toProductDetail(p: LeanProduct): ProductDetailDTO {
     ...toProductCard(p),
     description: p.description,
     images: p.images.map((i) => ({ url: i.url, alt: i.alt })),
-    variants: variants(p),
     materials: p.materials ?? "",
     care: p.care ?? "",
   };

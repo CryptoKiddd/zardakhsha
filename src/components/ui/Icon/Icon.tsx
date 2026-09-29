@@ -44,6 +44,12 @@ const paths = {
   chevronRight: <path d="m9 6 6 6-6 6" />,
   arrowRight: <path d="M4 12h16m-6-6 6 6-6 6" />,
   pause: <path d="M9 6v12M15 6v12" />,
+  ruler: (
+    <>
+      <rect x="2.5" y="8" width="19" height="8" rx="1.5" />
+      <path d="M6.5 8v3M10 8v4M13.5 8v3M17 8v4" />
+    </>
+  ),
   phone: (
     <>
       <rect x="7" y="3" width="10" height="18" rx="2" />
