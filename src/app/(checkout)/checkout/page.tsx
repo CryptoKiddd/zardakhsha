@@ -35,6 +35,7 @@ export default async function CheckoutPage() {
         <CheckoutForm
           // Phone sign-ups have a placeholder address that can't receive mail: ask for a real one.
           email={isPlaceholderEmail(session?.user.email) ? undefined : session?.user.email}
+          phone={session?.user.phoneNumber ?? undefined}
           defaultAddress={defaultAddress}
           total={cart.subtotal + shippingFor(cart.subtotal)}
           freeDelivery={shippingFor(cart.subtotal) === 0}

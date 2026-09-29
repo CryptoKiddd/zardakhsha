@@ -30,6 +30,8 @@ export function AddressFields({
         inputMode="tel"
         autoComplete="tel"
         placeholder="+995 555 12 34 56"
+        // Same rule as addressSchema, so the browser can tell when the form is complete.
+        pattern="\+?[0-9\s\-]{9,16}"
         defaultValue={values.phone}
         error={errors.phone}
         required

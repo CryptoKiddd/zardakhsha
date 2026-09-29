@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useEffect, useRef, useState } from "react";
 import { Button, Field, Icon } from "@/components/ui";
 import { StickyActionBar } from "@/components/layout";
 import { FREE_SHIPPING_THRESHOLD, SHIPPING_FEE } from "@/config/shop";
@@ -11,25 +11,35 @@ import { placeOrder, type CheckoutState } from "../actions";
 import s from "./Checkout.module.scss";
 
 /**
- * One page, three short cards: contact → delivery → payment. No accordions, no delivery-method choice:
- * every order goes by our courier within Georgia. Prefills from the default saved address.
+ * Two short cards (contact, delivery), prefilled from the account. The Pay button unlocks once every
+ * required field is valid, then sends the customer to Bank of Georgia's payment page.
  */
 export function CheckoutForm({
   email,
+  phone,
   defaultAddress,
   total,
   freeDelivery,
 }: {
   email?: string;
+  /** Phone the customer signed in with, used when there's no saved address yet. */
+  phone?: string;
   defaultAddress?: AddressDTO;
   total: number;
   freeDelivery: boolean;
 }) {
   const [state, action, pending] = useActionState<CheckoutState, FormData>(placeOrder, {});
-  const values = state.values ?? { email: email ?? "", ...(defaultAddress ?? {}) };
+  const values = state.values ?? { email: email ?? "", phone: phone ?? "", ...(defaultAddress ?? {}) };
+  const form = useRef<HTMLFormElement>(null);
+  const [complete, setComplete] = useState(false);
+
+  // Read the browser's own validity (required, email, phone pattern). Prefilled/autofilled forms can be
+  // complete before anyone types, so check once on mount too; after that, every input re-checks.
+  const check = () => setComplete(form.current?.checkValidity() ?? false);
+  useEffect(check, [state]);
 
   return (
-    <form action={action} className={s.form}>
+    <form ref={form} action={action} className={s.form} onInput={check} onChange={check}>
       <section className={s.step} aria-labelledby="step-contact">
         <h2 id="step-contact" className={s.stepTitle}>
           <span className={s.num}>1</span> Contact
@@ -39,7 +49,7 @@ export function CheckoutForm({
           name="email"
           type="email"
           autoComplete="email"
-          hint="For your order confirmation"
+          hint="For your receipt and order updates"
           defaultValue={values.email}
           error={state.errors?.email}
           required
@@ -65,16 +75,6 @@ export function CheckoutForm({
         </p>
       </section>
 
-      <section className={s.step} aria-labelledby="step-payment">
-        <h2 id="step-payment" className={s.stepTitle}>
-          <span className={s.num}>3</span> Payment
-        </h2>
-        <p className={s.note}>
-          <Icon name="lock" size={18} />
-          After you place the order you&apos;ll pay by card on our bank&apos;s secure page.
-        </p>
-      </section>
-
       {state.message && (
         <p className={s.error} role="alert">
           {state.message}
@@ -82,9 +82,22 @@ export function CheckoutForm({
       )}
 
       <StickyActionBar>
-        <Button type="submit" fullWidth loading={pending} iconEnd={<Icon name="lock" size={18} />}>
-          Place order · {formatPrice(total)}
-        </Button>
+        <div className={s.pay}>
+          <Button
+            type="submit"
+            fullWidth
+            loading={pending}
+            disabled={!complete}
+            iconStart={complete ? <Icon name="lock" size={18} /> : undefined}
+          >
+            {complete ? `Pay ${formatPrice(total)}` : "Complete your details"}
+          </Button>
+          {/* A failed attempt is explained right under the button, where the customer is looking. */}
+          <p className={state.message ? s.payError : s.payNote}>
+            {state.message ??
+              (complete ? "Secure payment by Bank of Georgia" : "Fill in the required fields to continue")}
+          </p>
+        </div>
       </StickyActionBar>
     </form>
   );

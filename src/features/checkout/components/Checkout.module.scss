@@ -64,6 +64,26 @@
   }
 }
 
+// Sticky bar: the Pay button with one line saying why it's locked / who processes the payment.
+.pay {
+  display: grid;
+  gap: 2px;
+  width: 100%;
+  padding-block: var(--space-2);
+}
+
+.payNote {
+  @include text(xs);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.payError {
+  @include text(xs);
+  color: var(--color-sale);
+  text-align: center;
+}
+
 .note {
   display: flex;
   gap: var(--space-2);
