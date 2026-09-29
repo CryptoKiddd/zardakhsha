@@ -3,8 +3,10 @@
 import { randomUUID } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 import { z } from "zod";
 import { CART_COOKIE } from "@/config/shop";
+import { getOrderForViewer } from "@/features/orders/queries";
 import { getSession } from "@/lib/auth";
 import { connectDb } from "@/lib/db";
 import { Cart, Product } from "@/models";
@@ -83,4 +85,27 @@ export async function setLineQuantity(sku: string, quantity: number): Promise<Ac
   }
   refreshCartUi();
   return { ok: true };
+}
+
+/**
+ * "Return to checkout" after a failed or abandoned bank payment: puts the order's pieces back in the bag
+ * (as far as they're still in stock) and goes to checkout. Only the order's owner can do this.
+ */
+export async function restoreOrderToBag(number: string): Promise<void> {
+  const parsed = z.string().max(20).safeParse(number);
+  const order = parsed.success ? await getOrderForViewer(parsed.data) : null;
+  if (!order) redirect("/bag");
+
+  await connectDb();
+  const cartId = await getOrCreateCartId();
+  const cart = (await Cart.findOne({ cartId })) ?? new Cart({ cartId, items: [] });
+  for (const line of order.lines) {
+    const product = await Product.findOne({ "variants.sku": line.sku, isPublished: true }, { variants: 1 }).lean();
+    const stock = product?.variants.find((v) => v.sku === line.sku)?.stock ?? 0;
+    if (!product || stock < 1 || cart.items.some((i) => i.sku === line.sku)) continue;
+    cart.items.push({ product: product._id, sku: line.sku, quantity: Math.min(line.quantity, stock, MAX_QTY) });
+  }
+  await cart.save();
+  refreshCartUi();
+  redirect("/checkout");
 }

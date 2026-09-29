@@ -4,21 +4,50 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ButtonLink, Container, CopyButton, Icon } from "@/components/ui";
 import { STATUS_LABEL } from "@/config/order-status";
+import { restoreOrderToBag } from "@/features/cart/actions";
 import { OrderTimeline } from "@/features/orders/components/OrderTimeline";
+import { syncPayment } from "@/features/orders/payments";
 import { getOrderForViewer } from "@/features/orders/queries";
 import { formatPrice } from "@/lib/format";
 import s from "./order.module.scss";
 
 export const metadata: Metadata = { title: "Your order", robots: { index: false } };
 
-export default async function OrderPage({ params }: PageProps<"/order/[number]">) {
+export default async function OrderPage({ params, searchParams }: PageProps<"/order/[number]">) {
   const { number } = await params;
-  const order = await getOrderForViewer(number);
+  let order = await getOrderForViewer(number); // ownership check first
   if (!order) notFound();
+
+  // Back from the bank: settle the payment now instead of waiting for BOG's callback.
+  if (order.status === "pending_payment") {
+    await syncPayment(number).catch((e) => console.error("Payment sync failed", e));
+    order = (await getOrderForViewer(number)) ?? order;
+  }
+  const paymentFailed = order.status === "cancelled" && (await searchParams).payment === "failed";
 
   const firstName = order.address.fullName.split(/\s+/)[0];
   const itemCount = order.lines.reduce((n, l) => n + l.quantity, 0);
   const confirmed = order.status === "pending_payment" || order.status === "paid";
+
+  if (paymentFailed) {
+    return (
+      <Container className={s.page}>
+        <section className={s.hero}>
+          <span className={`${s.badge} ${s.badgeFailed}`}>
+            <Icon name="close" size={28} />
+          </span>
+          <p className={s.eyebrow}>Payment not completed</p>
+          <h1 className={s.title}>Your payment didn&apos;t go through</h1>
+          <p className={s.lead}>Nothing was charged. Your pieces are waiting: return to checkout to try again.</p>
+          <form action={restoreOrderToBag.bind(null, order.number)} className={s.retry}>
+            <button type="submit" className={s.retryButton}>
+              Return to checkout <Icon name="arrowRight" size={20} />
+            </button>
+          </form>
+        </section>
+      </Container>
+    );
+  }
 
   return (
     <Container className={s.page}>

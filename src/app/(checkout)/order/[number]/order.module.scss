@@ -38,6 +38,41 @@
   color: var(--color-text);
 }
 
+.badgeFailed {
+  background: color-mix(in srgb, var(--color-sale) 14%, var(--color-surface));
+  color: var(--color-sale);
+}
+
+.retry {
+  width: 100%;
+  margin-top: var(--space-3);
+}
+
+// Same look as the primary Button (a plain <button> because this form posts a Server Action directly).
+.retryButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  width: 100%;
+  min-height: 48px;
+  border-radius: var(--radius-sm);
+  background: var(--gradient-accent);
+  background-size: 200% 100%;
+  color: var(--color-accent-contrast);
+  font-weight: 600;
+  transition:
+    background-position 500ms var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+
+  @media (hover: hover) {
+    &:hover {
+      background-position: 100% 0;
+      box-shadow: var(--shadow-glow);
+    }
+  }
+}
+
 .eyebrow {
   @include eyebrow;
   font-weight: 600;
