@@ -25,7 +25,7 @@
 
   .panel {
     max-height: 88dvh;
-    border-radius: var(--radius-md) var(--radius-md) 0 0;
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
     animation: slide-up var(--dur-base) var(--ease-out);
   }
 
@@ -34,7 +34,7 @@
     width: min(560px, 100% - 2 * var(--gutter));
 
     .panel {
-      border-radius: var(--radius-md);
+      border-radius: var(--radius-lg);
     }
   }
 }
@@ -78,6 +78,20 @@
   overflow-y: auto;
   overscroll-behavior: contain;
   padding: var(--space-4) var(--gutter) calc(var(--space-5) + env(safe-area-inset-bottom));
+}
+
+// Pinned actions (Add to bag, Show results): always visible above the scrolling body.
+.footer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--gutter) calc(var(--space-3) + env(safe-area-inset-bottom));
+  border-top: 1px solid var(--color-border);
+  background: var(--color-surface);
+}
+
+.hasFooter .body {
+  padding-bottom: var(--space-5);
 }
 
 @keyframes slide-up {
