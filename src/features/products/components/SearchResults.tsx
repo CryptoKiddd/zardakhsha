@@ -2,15 +2,18 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge, Price } from "@/components/ui";
 import { CATEGORIES, routes } from "@/config/navigation";
-import { QuickAddButton } from "@/features/cart/components/QuickAddButton";
+import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
+import { getWishlistIds } from "@/features/wishlist/queries";
 import { cardBadge } from "../badges";
 import type { ProductCardDTO } from "../types";
+import { QuickAdd } from "./QuickAdd";
 import s from "./SearchResults.module.scss";
 
 const CATEGORY_LABEL = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.label]));
 
 /** Search "Live Matches": compact rows (thumb + details + add), so more results fit above the fold than a grid. */
-export function SearchResultList({ products }: { products: ProductCardDTO[] }) {
+export async function SearchResultList({ products }: { products: ProductCardDTO[] }) {
+  const savedIds = await getWishlistIds();
   return (
     <ul className={s.list}>
       {products.map((p, i) => {
@@ -27,7 +30,16 @@ export function SearchResultList({ products }: { products: ProductCardDTO[] }) {
                 )}
               </div>
               <div className={s.body}>
-                <p className={s.category}>{CATEGORY_LABEL[p.category]}</p>
+                <div className={s.top}>
+                  <p className={s.category}>{CATEGORY_LABEL[p.category]}</p>
+                  <WishlistButton
+                    productId={p.id}
+                    productName={p.name}
+                    initialSaved={savedIds.includes(p.id)}
+                    variant="bar"
+                    className={s.wish}
+                  />
+                </div>
                 <h3 className={s.name}>
                   <Link href={routes.product(p.slug)} className={s.link}>
                     {p.name}
@@ -36,11 +48,9 @@ export function SearchResultList({ products }: { products: ProductCardDTO[] }) {
                 <p className={s.subtitle}>{p.subtitle}</p>
                 <div className={s.buy}>
                   <Price amount={p.price} compareAt={p.compareAtPrice} className={s.price} />
-                  {p.quickAddSku && (
-                    <div className={s.add}>
-                      <QuickAddButton sku={p.quickAddSku} productName={p.name} variant="text" />
-                    </div>
-                  )}
+                  <div className={s.add}>
+                    <QuickAdd product={p} variant="text" />
+                  </div>
                 </div>
               </div>
             </article>

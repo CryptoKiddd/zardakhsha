@@ -116,18 +116,11 @@
   @include text(lg);
 }
 
-.cta {
-  display: inline-flex;
-  align-items: center;
-  gap: var(--space-1);
-  @include text(sm);
-  font-weight: 600;
-  color: var(--color-gold-text);
-}
-
-.quickAdd {
-  position: relative;
+.wish {
+  position: absolute;
   z-index: 1; // above the tile's full-size link overlay
+  top: var(--space-3);
+  right: var(--space-3);
 }
 
 // Skeleton

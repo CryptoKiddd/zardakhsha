@@ -1,19 +1,22 @@
 import Image from "next/image";
 import Link from "next/link";
 import clsx from "clsx";
-import { Badge, Icon, Price } from "@/components/ui";
+import { Badge, Price } from "@/components/ui";
 import { routes } from "@/config/navigation";
-import { QuickAddButton } from "@/features/cart/components/QuickAddButton";
+import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
+import { getWishlistIds } from "@/features/wishlist/queries";
 import { cardBadge } from "../badges";
 import type { ProductCardDTO } from "../types";
+import { QuickAdd } from "./QuickAdd";
 import s from "./FeaturedWorks.module.scss";
 
 /**
  * Home "Featured Works" bento: first product is the large tile, the next two stack beside it on md+.
  * Stacked full-width on mobile.
  */
-export function FeaturedWorks({ products }: { products: ProductCardDTO[] }) {
+export async function FeaturedWorks({ products }: { products: ProductCardDTO[] }) {
   if (products.length === 0) return null;
+  const savedIds = await getWishlistIds();
 
   return (
     <ul className={s.grid}>
@@ -36,6 +39,9 @@ export function FeaturedWorks({ products }: { products: ProductCardDTO[] }) {
                     {badge.label}
                   </Badge>
                 )}
+                <div className={s.wish}>
+                  <WishlistButton productId={p.id} productName={p.name} initialSaved={savedIds.includes(p.id)} />
+                </div>
               </div>
               <div className={s.body}>
                 <div className={s.text}>
@@ -48,17 +54,7 @@ export function FeaturedWorks({ products }: { products: ProductCardDTO[] }) {
                 </div>
                 <div className={s.buy}>
                   <Price amount={p.price} compareAt={p.compareAtPrice} className={s.price} />
-                  {large ? (
-                    <span className={s.cta} aria-hidden>
-                      Acquire <Icon name="arrowRight" size={16} />
-                    </span>
-                  ) : (
-                    p.quickAddSku && (
-                      <div className={s.quickAdd}>
-                        <QuickAddButton sku={p.quickAddSku} productName={p.name} />
-                      </div>
-                    )
-                  )}
+                  <QuickAdd product={p} />
                 </div>
               </div>
             </article>

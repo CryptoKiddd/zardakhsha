@@ -4,29 +4,30 @@
   display: contents;
 }
 
-// Solid square "+" in the card's price row (design: dark tile, light glyph).
+// Soft cobalt square "+" (Stitch card); fills with the accent gradient on hover.
 // Nested under .form so it outranks IconButton's base colors regardless of CSS order.
 .form .button {
   border-radius: var(--radius-sm);
-  background: var(--color-text);
-  color: var(--color-bg);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
 
   @media (hover: hover) {
     &:hover:not(:disabled) {
-      background: var(--color-accent);
+      background: var(--gradient-accent);
+      background-size: 200% 100%;
+      color: var(--color-accent-contrast);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-1px);
     }
   }
 }
 
-// Labeled gold button in search result rows (design: "+ Vault").
+// Labeled "+ Add" (search rows): the primary gradient button.
 .form .textButton {
   min-height: var(--tap-min);
-  background: var(--color-gold-text);
-  color: var(--color-accent-contrast);
-
-  @media (hover: hover) {
-    &:hover:not(:disabled) {
-      background: var(--color-text);
-    }
-  }
 }

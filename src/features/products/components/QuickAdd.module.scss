@@ -1,0 +1,108 @@
+@use "abstracts" as *;
+
+// Same look as QuickAddButton, so every card's "+" is identical whatever it does.
+.trigger {
+  position: relative;
+  z-index: 1; // above the card's full-size link overlay
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-1);
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  transition:
+    background-position 500ms var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+.icon {
+  width: var(--tap-min);
+  height: var(--tap-min);
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background: var(--gradient-accent);
+      background-size: 200% 100%;
+      color: var(--color-accent-contrast);
+      box-shadow: var(--shadow-glow);
+      transform: translateY(-1px);
+    }
+  }
+}
+
+.text {
+  min-height: var(--tap-min);
+  padding-inline: var(--space-4);
+  background: var(--gradient-accent);
+  background-size: 200% 100%;
+  color: var(--color-accent-contrast);
+  @include text(sm);
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      background-position: 100% 0;
+      box-shadow: var(--shadow-glow);
+    }
+  }
+}
+
+// ── Sheet ───────────────────────────────────────────────────
+.sheet {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.product {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: center;
+}
+
+.thumb {
+  position: relative;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-surface-alt);
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.info {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.name {
+  @include heading(lg);
+  @include line-clamp(2);
+}
+
+.details {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  width: fit-content;
+  @include text(sm);
+  font-weight: 600;
+  color: var(--color-accent);
+}
+
+.error {
+  @include text(sm);
+  color: var(--color-sale);
+}

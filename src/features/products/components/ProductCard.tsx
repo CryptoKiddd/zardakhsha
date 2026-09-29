@@ -2,17 +2,20 @@ import Image from "next/image";
 import Link from "next/link";
 import { Badge, Price, Rating, SwatchRow } from "@/components/ui";
 import { routes } from "@/config/navigation";
-import { QuickAddButton } from "@/features/cart/components/QuickAddButton";
+import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
+import { getWishlistIds } from "@/features/wishlist/queries";
 import { cardBadge } from "../badges";
 import type { ProductCardDTO } from "../types";
+import { QuickAdd } from "./QuickAdd";
 import s from "./ProductCard.module.scss";
 
 /**
- * THE product card: used in grids, carousels and "complete the look".
- * Server Component; only the quick-add button is interactive.
+ * THE product card (Stitch): photo inset in the card, badge top-left, heart top-right, and the same "+"
+ * bottom-right on every card. Server Component; only the heart and "+" are client islands.
  */
-export function ProductCard({ product, priority = false }: { product: ProductCardDTO; priority?: boolean }) {
+export async function ProductCard({ product, priority = false }: { product: ProductCardDTO; priority?: boolean }) {
   const badge = cardBadge(product);
+  const saved = (await getWishlistIds()).includes(product.id); // one read per request, shared by all cards
 
   return (
     <article className={s.card}>
@@ -31,6 +34,9 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
             {badge.label}
           </Badge>
         )}
+        <div className={s.wish}>
+          <WishlistButton productId={product.id} productName={product.name} initialSaved={saved} />
+        </div>
       </div>
 
       <div className={s.body}>
@@ -46,11 +52,7 @@ export function ProductCard({ product, priority = false }: { product: ProductCar
         {product.colors.length > 1 && <SwatchRow colors={product.colors} />}
         <div className={s.buy}>
           <Price amount={product.price} compareAt={product.compareAtPrice} className={s.price} />
-          {product.quickAddSku && (
-            <div className={s.quickAdd}>
-              <QuickAddButton sku={product.quickAddSku} productName={product.name} />
-            </div>
-          )}
+          <QuickAdd product={product} />
         </div>
       </div>
     </article>
