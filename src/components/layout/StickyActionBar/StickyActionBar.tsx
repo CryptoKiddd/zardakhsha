@@ -7,7 +7,8 @@ import s from "./StickyActionBar.module.scss";
  */
 export function StickyActionBar({ children }: { children: React.ReactNode }) {
   return (
-    <div className={s.bar}>
+    // data-action-bar lets toasts float above this bar instead of covering the main button.
+    <div className={s.bar} data-action-bar>
       <div className={s.inner}>{children}</div>
     </div>
   );

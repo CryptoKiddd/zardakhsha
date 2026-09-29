@@ -96,6 +96,7 @@
   --z-action-bar: 30;
   --z-overlay: 40;
   --z-drawer: 50;
+  --z-toast: 60; // above sheets: confirmations must stay visible
 }
 
 @media (prefers-reduced-motion: reduce) {

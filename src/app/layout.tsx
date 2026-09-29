@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
+import { Toaster } from "@/components/ui";
 import "@/styles/globals.scss";
 
 // Self-hosted (OFL-licensed) variable fonts: no build-time network fetch, no layout shift.
@@ -38,7 +39,10 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" className={`${cormorant.variable} ${inter.variable}`}>
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

@@ -4,6 +4,8 @@ export { Badge, type BadgeTone } from "./Badge/Badge";
 export { Button, ButtonLink, type ButtonProps } from "./Button/Button";
 export { Chip } from "./Chip/Chip";
 export { CopyButton } from "./CopyButton/CopyButton";
+export { toast, type ToastOptions } from "./Toast/toast";
+export { Toaster } from "./Toast/Toaster";
 export { Field } from "./Field/Field";
 export { Icon, type IconName } from "./Icon/Icon";
 export { IconButton } from "./IconButton/IconButton";

@@ -1,0 +1,159 @@
+@use "abstracts" as *;
+
+// Top-layer popover: reset the UA popover box, then float bottom-centre.
+.region {
+  position: fixed;
+  inset: auto 0 calc(var(--space-4) + env(safe-area-inset-bottom)) 0;
+  z-index: var(--z-toast);
+  width: min(100% - 2 * var(--gutter), 420px);
+  margin: 0 auto;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow: visible;
+  pointer-events: none; // only the toasts themselves are clickable
+
+  // On pages with a sticky action bar, sit above it so the main button stays visible.
+  :global(body:has([data-action-bar])) & {
+    bottom: calc(var(--action-bar-h) + var(--space-3) + env(safe-area-inset-bottom));
+  }
+
+  @include up(md) {
+    inset: auto var(--space-5) var(--space-5) auto;
+    margin: 0;
+  }
+}
+
+.list {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 52px;
+  padding: var(--space-2) var(--space-2) var(--space-2) var(--space-3);
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-text) 94%, transparent);
+  backdrop-filter: blur(12px) saturate(1.3);
+  box-shadow: var(--shadow-md);
+  color: var(--color-bg);
+  pointer-events: auto;
+  touch-action: pan-y;
+  translate: var(--drag, 0) 0;
+  opacity: calc(1 - var(--depth, 0) * 0.08);
+  transition:
+    translate var(--dur-base) var(--ease-out),
+    opacity var(--dur-base) var(--ease-out);
+
+  &[data-dragging] {
+    transition: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: toast-in 380ms var(--ease-out) both;
+
+    &.leaving {
+      animation: toast-out 220ms ease-in forwards;
+    }
+  }
+
+  &.leaving {
+    pointer-events: none;
+  }
+}
+
+.icon {
+  display: grid;
+  place-items: center;
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: color-mix(in srgb, var(--color-bg) 16%, transparent);
+
+  .success & {
+    background: var(--color-success);
+    color: #fff;
+  }
+
+  .error & {
+    background: var(--color-sale);
+    color: #fff;
+  }
+
+  .info & {
+    color: var(--color-gold);
+  }
+}
+
+.text {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.message {
+  @include text(sm);
+  font-weight: 600;
+}
+
+.description {
+  @include text(xs);
+  @include line-clamp(1);
+  opacity: 0.75;
+}
+
+.action {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-bg) 14%, transparent);
+  color: inherit;
+  @include text(sm);
+  font-weight: 600;
+  white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-out);
+
+  @media (hover: hover) {
+    &:hover {
+      background: color-mix(in srgb, var(--color-bg) 24%, transparent);
+    }
+  }
+}
+
+.close {
+  @include tap-target;
+  flex-shrink: 0;
+  min-width: 36px;
+  min-height: 36px;
+  border-radius: var(--radius-sm);
+  color: inherit;
+  opacity: 0.6;
+
+  @media (hover: hover) {
+    &:hover {
+      opacity: 1;
+    }
+  }
+}
+
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.96);
+    filter: blur(4px);
+  }
+}
+
+@keyframes toast-out {
+  to {
+    opacity: 0;
+    transform: translateY(12px) scale(0.96);
+  }
+}
