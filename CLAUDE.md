@@ -113,7 +113,7 @@ Before finishing any change, run the review in `.claude/skills/code-review/SKILL
 
 ## Known TODOs
 
-- Payments: `features/checkout/actions.ts` creates the order as `pending_payment`; integrate BOG/TBC and a webhook.
+- Payments: Bank of Georgia in `lib/payments/bog.ts` (checkout → BOG hosted page → callback `/api/payments/bog` + order-page sync, both re-read status from BOG). Needs `BOG_CLIENT_ID` / `BOG_CLIENT_SECRET`; verify field names against BOG's docs when onboarding.
 - Admin panel (product CRUD, image upload to Cloudinary/R2, orders) is phase 2: plan it as `app/(admin)/admin/*` behind a role check.
 - Wishlist action and newsletter subscribe are UI-only placeholders.
 - Consider `cacheComponents` + `"use cache"` for product queries once the catalog is stable.

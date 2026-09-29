@@ -37,6 +37,11 @@ const orderSchema = new Schema(
       notes: String,
     },
     status: { type: String, enum: ORDER_STATUSES, default: "pending_payment", index: true },
+    /** Where the customer pays. providerOrderId is the bank's id, used to read the real payment status. */
+    payment: {
+      provider: { type: String, enum: ["bog"] },
+      providerOrderId: { type: String, index: true },
+    },
     /** Every status the order has been in, oldest first: drives the customer's timeline. */
     statusHistory: {
       type: [
