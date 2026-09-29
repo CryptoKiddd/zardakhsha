@@ -246,9 +246,20 @@
   button {
     min-height: 48px;
     border-radius: var(--radius-sm);
-    background: var(--color-text);
-    color: var(--color-bg);
+    background: var(--gradient-accent);
+    background-size: 200% 100%;
+    color: var(--color-accent-contrast);
     font-weight: 600;
+    transition:
+      background-position 500ms var(--ease-out),
+      box-shadow var(--dur-base) var(--ease-out);
+
+    @media (hover: hover) {
+      &:hover {
+        background-position: 100% 0;
+        box-shadow: var(--shadow-glow);
+      }
+    }
 
     &:focus-visible {
       @include focus-ring;

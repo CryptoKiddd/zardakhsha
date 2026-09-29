@@ -15,7 +15,14 @@
   white-space: nowrap;
   transition:
     border-color var(--dur-fast) var(--ease-out),
-    background-color var(--dur-fast) var(--ease-out);
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+
+  @media (hover: hover) {
+    &:hover:not(:disabled) {
+      border-color: var(--color-accent);
+    }
+  }
 
   &:disabled {
     opacity: 0.4;
@@ -25,7 +32,8 @@
 }
 
 .selected {
-  border-color: var(--color-text);
-  background: var(--color-text);
-  color: var(--color-bg);
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-accent-contrast);
+  font-weight: 600;
 }

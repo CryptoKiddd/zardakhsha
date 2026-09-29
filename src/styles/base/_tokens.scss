@@ -4,26 +4,39 @@
 // change it HERE, never inline in a component.
 // ─────────────────────────────────────────────────────────────
 :root {
-  --color-bg: #f7f8fa;
+  // Color: pearl background, cobalt enamel accent, warm gold. Text pairs meet WCAG AA.
+  --color-bg: #fbf8fc;
   --color-surface: #ffffff;
-  --color-surface-alt: #f0f2f5;
+  --color-surface-alt: #f4eff8;
 
-  --color-text: #111827;
-  --color-muted: #6b7280;
-  --color-border: #e5e7eb;
+  --color-text: #1c1a24;
+  --color-muted: #676173;
+  --color-border: #e7e0ee;
 
-  --color-accent: #111827;
+  --color-accent: #3a4fd6; // cobalt enamel
+  --color-accent-2: #7b3fe4; // violet: gradient partner of the accent
   --color-accent-contrast: #ffffff;
-  --color-accent-hover: #1f2937;
+  --color-accent-hover: #2d40c2;
+  --color-accent-soft: #eceefe; // tinted fills (selected chips, icon tiles)
 
-  --color-sale: #ef4444;
-  --color-success: #22c55e;
+  --color-sale: #e0344c;
+  --color-success: #0f9d74;
 
-  --color-silver: #a8adb7;
-  --color-gold: #c5a24a;
-  --color-gold-text: #80651f;
+  --color-silver: #b3b8c6;
+  --color-gold: #e2ae47;
+  --color-gold-text: #7a5410; // gold that passes contrast on light backgrounds (eyebrows, text links)
 
-  --color-overlay: rgb(17 24 39 / 0.5);
+  --color-overlay: rgb(28 26 36 / 0.5);
+
+  // Gradients: primary actions and highlights. Sized 200% so hovers can slide them.
+  --gradient-accent: linear-gradient(
+    120deg,
+    var(--color-accent) 0%,
+    var(--color-accent-2) 55%,
+    var(--color-accent) 100%
+  );
+  --gradient-gold: linear-gradient(135deg, #f7d88a 0%, #e2ae47 50%, #c98a24 100%);
+  --gradient-sheen: linear-gradient(160deg, #ffffff 0%, var(--color-surface-alt) 100%);
 
   // Typography (font families are injected by next/font in app/layout.tsx)
   --font-serif: var(--font-cormorant), "Cormorant Garamond", Georgia, serif;
@@ -53,14 +66,16 @@
   --space-8: 4rem; // 64
   --gutter: var(--space-4);
 
-  // Radius
-  --radius-sm: 6px;
-  --radius-md: 12px; // cards
+  // Radius: soft, as in the Stitch cards and buttons
+  --radius-sm: 10px; // buttons, inputs, small tiles
+  --radius-md: 16px; // cards
+  --radius-lg: 24px; // sheets, hero panels
   --radius-pill: 999px;
 
   // Elevation
-  --shadow-sm: 0 1px 2px rgb(28 27 31 / 0.06);
-  --shadow-md: 0 6px 20px rgb(28 27 31 / 0.08);
+  --shadow-sm: 0 1px 3px rgb(40 30 70 / 0.07);
+  --shadow-md: 0 10px 28px rgb(40 30 70 / 0.1);
+  --shadow-glow: 0 8px 24px color-mix(in srgb, var(--color-accent) 32%, transparent);
 
   // Layout
   --header-h: 56px;

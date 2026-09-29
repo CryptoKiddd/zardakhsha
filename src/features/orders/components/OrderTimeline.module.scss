@@ -42,9 +42,9 @@
   color: var(--color-muted);
 
   .done & {
-    border-color: var(--color-text);
-    background: var(--color-text);
-    color: var(--color-bg);
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
   }
 
   .current & {
