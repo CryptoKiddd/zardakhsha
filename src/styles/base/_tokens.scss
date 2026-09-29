@@ -4,39 +4,39 @@
 // change it HERE, never inline in a component.
 // ─────────────────────────────────────────────────────────────
 :root {
-  // Color: milky pearl surfaces, cobalt enamel accent, warm gold. Text pairs meet WCAG AA.
-  --color-bg: #f8f6f1; // pearl
-  --color-surface: #fffefb; // milk white
-  --color-surface-alt: #f1ede5; // pearl shadow
+  // Color: neutral greys with a near-black accent and warm gold.
+  --color-bg: #f7f8fa;
+  --color-surface: #ffffff;
+  --color-surface-alt: #f0f2f5;
 
-  --color-text: #1d1c1a;
-  --color-muted: #69655d;
-  --color-border: #e6e0d5;
+  --color-text: #111827;
+  --color-muted: #6b7280;
+  --color-border: #e5e7eb;
 
-  --color-accent: #3348c8; // cobalt enamel
-  --color-accent-2: #22349c; // deep cobalt: gradient partner of the accent
+  --color-accent: #111827;
+  --color-accent-2: #374151; // charcoal: gradient partner of the accent
   --color-accent-contrast: #ffffff;
-  --color-accent-hover: #2a3cb0;
-  --color-accent-soft: #edf0fb; // tinted fills (selected chips, icon tiles)
+  --color-accent-hover: #1f2937;
+  --color-accent-soft: #eef0f3; // tinted fills (selected chips, icon tiles)
 
-  --color-sale: #d6334a;
-  --color-success: #0f8f6a;
+  --color-sale: #ef4444;
+  --color-success: #22c55e;
 
-  --color-silver: #b7bcc6;
-  --color-gold: #d9a441;
-  --color-gold-text: #735011; // gold that passes contrast on light backgrounds (eyebrows, text links)
+  --color-silver: #a8adb7;
+  --color-gold: #c5a24a;
+  --color-gold-text: #80651f;
 
-  --color-overlay: rgb(29 28 26 / 0.5);
+  --color-overlay: rgb(17 24 39 / 0.5);
 
-  // Gradients. Accent is sized 200% so hovers can slide it; pearl is the soft sheen of surfaces.
+  // Gradients. Accent is sized 200% so hovers can slide it; sheen is the soft light of surfaces.
   --gradient-accent: linear-gradient(
     120deg,
     var(--color-accent) 0%,
     var(--color-accent-2) 55%,
     var(--color-accent) 100%
   );
-  --gradient-gold: linear-gradient(135deg, #f3d58c 0%, #d9a441 50%, #b98424 100%);
-  --gradient-pearl: linear-gradient(135deg, #fffefb 0%, #f5f0e7 40%, #eef0f1 70%, #fbf7ef 100%);
+  --gradient-gold: linear-gradient(135deg, #e6cd8a 0%, #c5a24a 50%, #a8842f 100%);
+  --gradient-pearl: linear-gradient(135deg, #ffffff 0%, #f3f4f6 50%, #eceef1 100%);
   --gradient-sheen: var(--gradient-pearl);
 
   // Typography (font families are injected by next/font in app/layout.tsx)
@@ -74,8 +74,8 @@
   --radius-pill: 999px;
 
   // Elevation
-  --shadow-sm: 0 1px 3px rgb(60 50 30 / 0.07);
-  --shadow-md: 0 10px 28px rgb(60 50 30 / 0.1);
+  --shadow-sm: 0 1px 3px rgb(17 24 39 / 0.07);
+  --shadow-md: 0 10px 28px rgb(17 24 39 / 0.1);
   --shadow-glow: 0 8px 24px color-mix(in srgb, var(--color-accent) 32%, transparent);
 
   // Layout
