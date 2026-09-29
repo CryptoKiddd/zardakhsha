@@ -1,0 +1,241 @@
+@use "abstracts" as *;
+
+.methods {
+  display: grid;
+  gap: var(--space-4);
+}
+
+// ── Phone | Email switch ────────────────────────────────────
+.segmented {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: var(--space-1);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+}
+
+.segment {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  min-height: 40px;
+  border-radius: var(--radius-pill);
+  @include text(sm);
+  font-weight: 600;
+  color: var(--color-muted);
+  transition:
+    background-color var(--dur-base) var(--ease-out),
+    color var(--dur-base) var(--ease-out),
+    box-shadow var(--dur-base) var(--ease-out);
+
+  &[aria-pressed="true"] {
+    background: var(--color-surface);
+    color: var(--color-text);
+    box-shadow: var(--shadow-sm);
+  }
+}
+
+// ── Steps ───────────────────────────────────────────────────
+// Each step (phone → code, email → sent) enters with the carousel's rise-and-focus.
+.step {
+  display: grid;
+  gap: var(--space-3);
+  text-align: left;
+
+  @media (prefers-reduced-motion: no-preference) {
+    animation: step-in 450ms var(--ease-out) both;
+  }
+}
+
+@keyframes step-in {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+    filter: blur(4px);
+  }
+}
+
+.label {
+  @include text(sm);
+  font-weight: 600;
+}
+
+%field {
+  display: flex;
+  align-items: center;
+  min-height: 52px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    box-shadow var(--dur-fast) var(--ease-out);
+
+  &:focus-within {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gold) 22%, transparent);
+  }
+
+  &[data-invalid] {
+    border-color: var(--color-sale);
+  }
+
+  input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    min-height: 50px;
+    padding-inline: var(--space-3);
+    border: 0;
+    background: transparent;
+    font-size: var(--text-md); // 16px: no iOS zoom
+
+    &:focus-visible {
+      outline: none;
+    }
+  }
+}
+
+.phoneField {
+  @extend %field;
+}
+
+.prefix {
+  align-self: stretch;
+  display: grid;
+  place-items: center;
+  padding-inline: var(--space-3);
+  border-right: 1px solid var(--color-border);
+  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
+  background: var(--color-surface-alt);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.emailField {
+  @extend %field;
+  padding-left: var(--space-3);
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-gold-text);
+  }
+}
+
+.note {
+  @include text(xs);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.error {
+  @include text(sm);
+  color: var(--color-sale);
+}
+
+// ── OTP: one real input drawn as six boxes ──────────────────
+.sentTo {
+  @include text(sm);
+  color: var(--color-muted);
+  text-align: center;
+
+  strong {
+    color: var(--color-text);
+    font-variant-numeric: tabular-nums;
+    overflow-wrap: anywhere;
+  }
+}
+
+.otp {
+  position: relative;
+}
+
+// Transparent on top of the boxes: it receives taps, typing, paste and SMS autofill.
+.otpInput {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  width: 100%;
+  opacity: 0;
+  font-size: var(--text-md);
+  caret-color: transparent;
+}
+
+.otpBoxes {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: var(--space-2);
+}
+
+.otpBox {
+  display: grid;
+  place-items: center;
+  aspect-ratio: 5 / 6;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  font-family: var(--font-serif);
+  font-weight: 700;
+  font-variant-numeric: lining-nums tabular-nums;
+  @include text(xl);
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+
+  &[data-filled] {
+    border-color: var(--color-text);
+  }
+
+  .otp:focus-within &[data-active] {
+    border-color: var(--color-gold);
+    box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-gold) 22%, transparent);
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &[data-filled] {
+      animation: digit-pop 180ms var(--ease-out);
+    }
+  }
+}
+
+@keyframes digit-pop {
+  from {
+    transform: scale(0.9);
+  }
+}
+
+.codeActions {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+}
+
+.textButton {
+  @include tap-target;
+  @include text(sm);
+  font-weight: 600;
+  color: var(--color-gold-text);
+
+  &:disabled {
+    color: var(--color-muted);
+    cursor: default;
+  }
+}
+
+// ── Magic link sent ─────────────────────────────────────────
+.sentIcon {
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-md);
+  background: color-mix(in srgb, var(--color-gold) 22%, var(--color-surface));
+  color: var(--color-gold-text);
+}
+
+.sentTitle {
+  @include heading(xl);
+  text-align: center;
+}
