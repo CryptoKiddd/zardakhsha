@@ -3,6 +3,8 @@
 import { useActionState } from "react";
 import { Button, Icon, IconButton } from "@/components/ui";
 import { addToCart } from "../actions";
+import { notifyAddedToBag } from "../notify";
+import type { ActionResult } from "../types";
 import s from "./QuickAddButton.module.scss";
 
 /**
@@ -18,7 +20,11 @@ export function QuickAddButton({
   productName: string;
   variant?: "icon" | "text";
 }) {
-  const [state, action, pending] = useActionState(addToCart, null);
+  const [state, action, pending] = useActionState(async (prev: ActionResult | null, fd: FormData) => {
+    const res = await addToCart(prev, fd);
+    notifyAddedToBag(res, productName);
+    return res;
+  }, null);
   const icon = state?.ok ? "check" : "plus";
 
   return (
@@ -44,9 +50,6 @@ export function QuickAddButton({
           {state?.ok ? "Added" : "Add"}
         </Button>
       )}
-      <span className="visually-hidden" role="status">
-        {state?.message}
-      </span>
     </form>
   );
 }

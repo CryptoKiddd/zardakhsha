@@ -69,7 +69,7 @@ export async function addToCart(_prev: ActionResult | null, formData: FormData):
 
 const qtySchema = z.object({ sku: z.string().min(1), quantity: z.number().int().min(0).max(MAX_QTY) });
 
-/** quantity 0 removes the line. Called from CartLines with useOptimistic. */
+/** quantity 0 removes the line; a quantity for a line that's gone re-adds it (Undo). Used by CartLines. */
 export async function setLineQuantity(sku: string, quantity: number): Promise<ActionResult> {
   const parsed = qtySchema.safeParse({ sku, quantity });
   if (!parsed.success) return { ok: false, message: "Invalid quantity" };
@@ -81,7 +81,19 @@ export async function setLineQuantity(sku: string, quantity: number): Promise<Ac
   if (parsed.data.quantity === 0) {
     await Cart.updateOne({ cartId }, { $pull: { items: { sku } } });
   } else {
-    await Cart.updateOne({ cartId, "items.sku": sku }, { $set: { "items.$.quantity": parsed.data.quantity } });
+    const res = await Cart.updateOne(
+      { cartId, "items.sku": sku },
+      { $set: { "items.$.quantity": parsed.data.quantity } },
+    );
+    if (res.matchedCount === 0) {
+      const product = await Product.findOne({ "variants.sku": sku, isPublished: true }, { _id: 1 }).lean();
+      if (!product) return { ok: false, message: "This item is no longer available" };
+      // The sku guard makes a double Undo harmless.
+      await Cart.updateOne(
+        { cartId, "items.sku": { $ne: sku } },
+        { $push: { items: { product: product._id, sku, quantity: parsed.data.quantity } } },
+      );
+    }
   }
   refreshCartUi();
   return { ok: true };

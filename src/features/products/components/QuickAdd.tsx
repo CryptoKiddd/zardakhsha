@@ -8,6 +8,7 @@ import { Button, Icon, Price, Sheet } from "@/components/ui";
 import { routes } from "@/config/navigation";
 import { addToCart } from "@/features/cart/actions";
 import { QuickAddButton } from "@/features/cart/components/QuickAddButton";
+import { notifyAddedToBag } from "@/features/cart/notify";
 import { formatPrice } from "@/lib/format";
 import type { ProductCardDTO } from "../types";
 import { useVariantSelection } from "../variant-selection";
@@ -41,6 +42,7 @@ function QuickAddSheet({ product, variant = "icon" }: Props) {
   const [state, action, pending] = useActionState(
     async (prev: Awaited<ReturnType<typeof addToCart>> | null, fd: FormData) => {
       const res = await addToCart(prev, fd);
+      notifyAddedToBag(res, product.name);
       if (res.ok) setOpen(false);
       return res;
     },
@@ -68,9 +70,6 @@ function QuickAddSheet({ product, variant = "icon" }: Props) {
           </>
         )}
       </button>
-      <span className="visually-hidden" role="status">
-        {state?.message}
-      </span>
 
       <Sheet
         open={open}
@@ -108,11 +107,6 @@ function QuickAddSheet({ product, variant = "icon" }: Props) {
             </span>
           </div>
           <VariantOptions selection={sel} sizeError={triedWithoutSize && sel.missingSize} />
-          {state?.ok === false && (
-            <p className={s.error} role="alert">
-              {state.message}
-            </p>
-          )}
         </form>
       </Sheet>
     </>

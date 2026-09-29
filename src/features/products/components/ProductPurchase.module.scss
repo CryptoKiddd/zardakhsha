@@ -43,21 +43,6 @@
   }
 }
 
-.status:empty,
-.error:empty {
-  display: none;
-}
-
-.error {
-  @include text(sm);
-  color: var(--color-sale);
-}
-
-.status {
-  @include text(sm);
-  color: var(--color-success);
-}
-
 .barPrice {
   flex-shrink: 0;
   font-weight: 700;

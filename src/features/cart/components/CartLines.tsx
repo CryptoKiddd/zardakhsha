@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useOptimistic, useTransition } from "react";
-import { IconButton, Price } from "@/components/ui";
+import { IconButton, Price, toast } from "@/components/ui";
 import { routes } from "@/config/navigation";
 import { setLineQuantity } from "../actions";
 import type { CartLineDTO } from "../types";
@@ -24,7 +24,18 @@ export function CartLines({ lines }: { lines: CartLineDTO[] }) {
   function update(sku: string, quantity: number) {
     startTransition(async () => {
       applyOptimistic({ sku, quantity });
-      await setLineQuantity(sku, quantity);
+      const res = await setLineQuantity(sku, quantity);
+      if (!res.ok) toast.error(res.message, { id: "bag-line" });
+    });
+  }
+
+  // Quantity steps stay silent (the number changing is feedback enough); removal gets an Undo.
+  function remove(line: CartLineDTO) {
+    update(line.sku, 0);
+    toast("Removed from bag", {
+      id: "bag-line",
+      description: line.name,
+      action: { label: "Undo", onClick: () => update(line.sku, line.quantity) },
     });
   }
 
@@ -43,7 +54,7 @@ export function CartLines({ lines }: { lines: CartLineDTO[] }) {
               <IconButton
                 icon="trash"
                 label={`Remove ${line.name} from bag`}
-                onClick={() => update(line.sku, 0)}
+                onClick={() => remove(line)}
                 className={s.remove}
               />
             </div>

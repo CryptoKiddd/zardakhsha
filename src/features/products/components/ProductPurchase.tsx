@@ -5,6 +5,7 @@ import { Button, Icon, Price, Sheet } from "@/components/ui";
 import { StickyActionBar } from "@/components/layout";
 import { LOW_STOCK_AT } from "@/config/shop";
 import { addToCart } from "@/features/cart/actions";
+import { notifyAddedToBag } from "@/features/cart/notify";
 import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
 import { formatPrice } from "@/lib/format";
 import type { ProductDetailDTO } from "../types";
@@ -21,9 +22,10 @@ const FORM_ID = "product-purchase";
 export function ProductPurchase({ product, saved }: { product: ProductDetailDTO; saved: boolean }) {
   const sel = useVariantSelection(product.variants);
   const [sizeSheetOpen, setSizeSheetOpen] = useState(false);
-  const [state, action, pending] = useActionState(
+  const [, action, pending] = useActionState(
     async (prev: Awaited<ReturnType<typeof addToCart>> | null, fd: FormData) => {
       const res = await addToCart(prev, fd);
+      notifyAddedToBag(res, product.name);
       if (res.ok) setSizeSheetOpen(false);
       return res;
     },
@@ -45,10 +47,6 @@ export function ProductPurchase({ product, saved }: { product: ProductDetailDTO;
           <span className={s.pulse} aria-hidden /> Only {sel.selected.stock} left, handmade in small batches
         </p>
       )}
-
-      <p className={state?.ok === false ? s.error : s.status} role="status" aria-live="polite">
-        {state?.message}
-      </p>
 
       <StickyActionBar>
         <Price amount={sel.display.price} compareAt={sel.display.compareAtPrice} className={s.barPrice} />
