@@ -1,5 +1,6 @@
 "use server";
 
+import type { Route } from "next";
 import { randomInt } from "node:crypto";
 import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
@@ -9,7 +10,10 @@ import { routes } from "@/config/navigation";
 import { CART_COOKIE, FREE_SHIPPING_THRESHOLD, LAST_ORDER_COOKIE, SHIPPING_FEE } from "@/config/shop";
 import { addressSchema, fieldErrors, type AddressInput, type FieldErrors } from "@/features/account/schemas";
 import { getCart } from "@/features/cart/queries";
+import { transitionOrder } from "@/features/orders/transitions";
 import { getSession } from "@/lib/auth";
+import { createBogOrder, isBogConfigured } from "@/lib/payments/bog";
+import { siteUrl } from "@/lib/site";
 import { connectDb } from "@/lib/db";
 import { Cart, Order, Product } from "@/models";
 
@@ -52,6 +56,7 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
   }
 
   const number = `ZK-${randomInt(100000, 999999)}`;
+  const total = cart.subtotal + shipping;
   await Order.create({
     number,
     userId: session?.user.id,
@@ -67,15 +72,44 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
     })),
     subtotal: cart.subtotal,
     shipping,
-    total: cart.subtotal + shipping,
+    total,
     shippingAddress: address,
     status: "pending_payment",
     statusHistory: [{ status: "pending_payment", at: new Date() }],
   });
 
-  // TODO(payments): create a payment session with the chosen provider (e.g. BOG / TBC)
-  // here and redirect to it instead; the provider webhook then moves the order
-  // pending_payment → paid (see config/order-status.ts, same guard as scripts/order-status.ts).
+  // Open the payment at Bank of Georgia. The callback / return trip settles it (features/orders/payments.ts).
+  let paymentUrl: string | null = null;
+  if (isBogConfigured()) {
+    try {
+      const base = siteUrl();
+      const bog = await createBogOrder({
+        externalOrderId: number,
+        lines: cart.lines.map((l) => ({ sku: l.sku, name: l.name, unitPrice: l.price, quantity: l.quantity })),
+        delivery: shipping,
+        total,
+        callbackUrl: `${base}/api/payments/bog`,
+        successUrl: `${base}${routes.order(number)}`,
+        failUrl: `${base}${routes.order(number)}?payment=failed`,
+      });
+      await Order.updateOne({ number }, { $set: { payment: { provider: "bog", providerOrderId: bog.id } } });
+      paymentUrl = bog.redirectUrl;
+    } catch (error) {
+      console.error("BOG payment could not be started", error);
+      await transitionOrder(number, "cancelled"); // returns the reserved stock; the bag is kept
+      return {
+        message: "We couldn't open the bank's payment page. Nothing was charged; please try again.",
+        values: raw,
+      };
+    }
+  } else if (process.env.NODE_ENV === "production") {
+    await transitionOrder(number, "cancelled");
+    return {
+      message: "Online payment is unavailable right now. Nothing was charged; please try again later.",
+      values: raw,
+    };
+  }
+  // Development without BOG keys: the order stays "Awaiting payment" and goes straight to its page.
 
   const cartId = (await cookies()).get(CART_COOKIE)?.value;
   if (cartId) await Cart.deleteOne({ cartId });
@@ -85,5 +119,6 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
   jar.set(LAST_ORDER_COOKIE, number, { httpOnly: true, sameSite: "lax", path: "/order", maxAge: 60 * 60 * 24 });
   revalidatePath("/", "layout");
 
-  redirect(routes.order(number));
+  // The bank's page is an external URL, outside the typed-route set.
+  redirect(paymentUrl ? (paymentUrl as Route) : routes.order(number));
 }
