@@ -9,12 +9,13 @@ import s from "@/features/account/components/AccountPage.module.scss";
 export const metadata: Metadata = { title: "My account" };
 
 const CARDS: {
-  href: "/account/orders" | "/account/addresses" | "/bag";
+  href: "/account/orders" | "/account/wishlist" | "/account/addresses" | "/bag";
   icon: IconName;
   title: string;
   text: string;
 }[] = [
   { href: "/account/orders", icon: "truck", title: "Orders", text: "Track and view past orders" },
+  { href: "/account/wishlist", icon: "heart", title: "Saved", text: "Pieces you've hearted" },
   { href: "/account/addresses", icon: "user", title: "Addresses", text: "Delivery name, phone and address" },
   { href: "/bag", icon: "bag", title: "Bag", text: "Continue where you left off" },
 ];

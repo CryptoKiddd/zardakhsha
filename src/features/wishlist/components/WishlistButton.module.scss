@@ -1,0 +1,59 @@
+@use "abstracts" as *;
+
+.button {
+  @include tap-target;
+  position: relative;
+  color: var(--color-text);
+  transition:
+    color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out),
+    transform var(--dur-fast) var(--ease-out);
+
+  &[aria-pressed="true"] {
+    color: var(--color-sale);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-sale);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    &[aria-pressed="true"] svg {
+      animation: heart-pop 320ms var(--ease-out);
+    }
+  }
+}
+
+// Frosted rounded square on product photos (Stitch).
+.overlay {
+  width: 40px;
+  height: 40px;
+  min-width: 0;
+  min-height: 0;
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-surface) 82%, transparent);
+  backdrop-filter: blur(8px);
+  box-shadow: var(--shadow-sm);
+
+  // Keep a 44px hit area around the 40px visual.
+  &::after {
+    content: "";
+    position: absolute;
+    inset: -2px;
+  }
+}
+
+.bar {
+  flex-shrink: 0;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+@keyframes heart-pop {
+  40% {
+    transform: scale(1.3);
+  }
+}

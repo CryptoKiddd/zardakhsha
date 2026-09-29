@@ -52,6 +52,7 @@ export const MENU_SECONDARY: NavLink[] = [
 export const MENU_ACCOUNT: NavLink[] = [
   { label: "My Account", href: "/account" },
   { label: "Orders", href: "/account/orders" },
+  { label: "Saved", href: "/account/wishlist" },
   { label: "Addresses", href: "/account/addresses" },
 ];
 
