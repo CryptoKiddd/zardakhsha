@@ -5,8 +5,9 @@
   place-items: center;
   height: var(--announcement-h);
   padding-inline: var(--gutter);
-  background: var(--gradient-accent);
-  color: var(--color-accent-contrast);
+  background: var(--gradient-pearl);
+  border-bottom: 1px solid var(--color-border);
+  color: var(--color-text);
   font-weight: 500;
   @include text(xs);
   letter-spacing: 0.04em;
