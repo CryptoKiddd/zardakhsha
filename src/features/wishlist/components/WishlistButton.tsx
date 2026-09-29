@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 import { useOptimistic, useState, useTransition } from "react";
 import clsx from "clsx";
-import { Icon } from "@/components/ui";
+import { Icon, toast } from "@/components/ui";
 import { setWishlisted } from "../actions";
 import s from "./WishlistButton.module.scss";
 
@@ -31,13 +31,31 @@ export function WishlistButton({
   const [optimistic, setOptimistic] = useOptimistic(saved);
   const [, startTransition] = useTransition();
 
-  function toggle() {
-    const next = !optimistic;
+  function toggle(next = !optimistic) {
     startTransition(async () => {
       setOptimistic(next);
       const res = await setWishlisted(productId, next);
-      if (res.ok) setSaved(res.saved);
-      else if (res.needsAuth) router.push(`/login?next=${encodeURIComponent(pathname)}` as "/login");
+      if (res.ok) {
+        setSaved(res.saved);
+        if (res.saved) {
+          toast.success("Saved to favourites", {
+            id: "wishlist",
+            description: productName,
+            action: { label: "View saved", href: "/account/wishlist" },
+          });
+        } else {
+          toast("Removed from favourites", {
+            id: "wishlist",
+            description: productName,
+            action: { label: "Undo", onClick: () => toggle(true) },
+          });
+        }
+      } else if (res.needsAuth) {
+        toast("Sign in to save favourites", { id: "wishlist", description: "It takes a few seconds, no password." });
+        router.push(`/login?next=${encodeURIComponent(pathname)}` as "/login");
+      } else {
+        toast.error(res.message, { id: "wishlist" });
+      }
     });
   }
 
