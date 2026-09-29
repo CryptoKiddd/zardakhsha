@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Container, Icon, type IconName } from "@/components/ui";
+import { isPlaceholderEmail } from "@/config/auth";
 import { SignOutButton } from "@/features/account/components/AuthButtons";
 import { requireUser } from "@/features/account/queries";
 import s from "@/features/account/components/AccountPage.module.scss";
@@ -24,7 +25,8 @@ export default async function AccountPage() {
   return (
     <Container className={s.page}>
       <h1>Hi, {user.name.split(" ")[0]}</h1>
-      <p className={s.muted}>{user.email}</p>
+      {/* Phone sign-ups have a placeholder email; show the number they signed in with instead. */}
+      <p className={s.muted}>{isPlaceholderEmail(user.email) ? (user.phoneNumber ?? "") : user.email}</p>
 
       <ul className={s.cards}>
         {CARDS.map((c) => (

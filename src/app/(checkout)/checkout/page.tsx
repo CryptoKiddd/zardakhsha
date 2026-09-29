@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { Container, Icon } from "@/components/ui";
+import { isPlaceholderEmail } from "@/config/auth";
 import { WithActionBar } from "@/components/layout";
 import { GoogleSignInButton } from "@/features/account/components/AuthButtons";
 import { getAddresses } from "@/features/account/queries";
@@ -32,7 +33,8 @@ export default async function CheckoutPage() {
           </div>
         )}
         <CheckoutForm
-          email={session?.user.email}
+          // Phone sign-ups have a placeholder address that can't receive mail: ask for a real one.
+          email={isPlaceholderEmail(session?.user.email) ? undefined : session?.user.email}
           defaultAddress={defaultAddress}
           total={cart.subtotal + shippingFor(cart.subtotal)}
           freeDelivery={shippingFor(cart.subtotal) === 0}
