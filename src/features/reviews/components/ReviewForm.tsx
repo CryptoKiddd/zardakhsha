@@ -1,7 +1,7 @@
 "use client";
 
 import { useActionState, useState } from "react";
-import { Button, Icon, Sheet } from "@/components/ui";
+import { Button, Icon, Sheet, toast } from "@/components/ui";
 import { StickyActionBar } from "@/components/layout";
 import { createReview, type ReviewFormState } from "../actions";
 import s from "./Reviews.module.scss";
@@ -10,7 +10,17 @@ import s from "./Reviews.module.scss";
 export function ReviewForm({ productId, slug }: { productId: string; slug: string }) {
   const [open, setOpen] = useState(false);
   const [rating, setRating] = useState(0);
-  const [state, action, pending] = useActionState<ReviewFormState, FormData>(createReview, { ok: false });
+  const [state, action, pending] = useActionState<ReviewFormState, FormData>(
+    async (prev, fd) => {
+      const res = await createReview(prev, fd);
+      if (res.ok) {
+        setOpen(false);
+        toast.success("Review posted", { id: "review", description: "Thank you, it's live now." });
+      }
+      return res;
+    },
+    { ok: false },
+  );
 
   return (
     <>

@@ -1,13 +1,20 @@
 "use client";
 
 import { useActionState } from "react";
-import { Button } from "@/components/ui";
+import { Button, toast } from "@/components/ui";
 import { saveAddress, type AddressFormState } from "../actions";
 import { AddressFields } from "./AddressFields";
 import s from "./Account.module.scss";
 
 export function AddressForm() {
-  const [state, action, pending] = useActionState<AddressFormState, FormData>(saveAddress, { ok: false });
+  const [state, action, pending] = useActionState<AddressFormState, FormData>(
+    async (prev, fd) => {
+      const res = await saveAddress(prev, fd);
+      if (res.ok) toast.success(res.message ?? "Address saved", { id: "address" });
+      return res;
+    },
+    { ok: false },
+  );
 
   return (
     // `key` resets the uncontrolled inputs after a successful save.
@@ -17,9 +24,11 @@ export function AddressForm() {
         <input type="checkbox" name="isDefault" />
         Set as default address
       </label>
-      <p role="status" className={state.ok ? s.success : s.error}>
-        {state.message}
-      </p>
+      {!state.ok && state.message && (
+        <p role="alert" className={s.error}>
+          {state.message}
+        </p>
+      )}
       <Button type="submit" fullWidth loading={pending}>
         Save address
       </Button>

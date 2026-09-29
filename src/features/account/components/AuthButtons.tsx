@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useTransition } from "react";
-import { Button, Icon } from "@/components/ui";
+import { Button, Icon, toast } from "@/components/ui";
 import { authClient } from "@/lib/auth-client";
 
 export function GoogleSignInButton({ callbackURL = "/account" }: { callbackURL?: string }) {
@@ -34,6 +34,7 @@ export function SignOutButton() {
       onClick={() =>
         startTransition(async () => {
           await authClient.signOut();
+          toast("Signed out", { id: "auth", description: "See you soon." });
           router.push("/");
           router.refresh();
         })
