@@ -13,6 +13,8 @@ const orderLineSchema = new Schema(
     variantLabel: { type: String, required: true },
     image: { type: String, required: true },
     price: { type: Number, required: true },
+    /** Unit cost at the time of sale (tetri), so profit reports survive later cost changes. Admin-only. */
+    unitCost: { type: Number, min: 0 },
     quantity: { type: Number, required: true, min: 1 },
   },
   { _id: false },
@@ -26,6 +28,8 @@ const orderSchema = new Schema(
     lines: { type: [orderLineSchema], required: true },
     subtotal: { type: Number, required: true },
     shipping: { type: Number, required: true },
+    discount: { type: Number, default: 0, min: 0 }, // promotions (tetri); comes out of profit
+    couponCode: { type: String, trim: true, uppercase: true },
     total: { type: Number, required: true },
     shippingAddress: {
       fullName: { type: String, required: true },
@@ -37,6 +41,7 @@ const orderSchema = new Schema(
       notes: String,
     },
     status: { type: String, enum: ORDER_STATUSES, default: "pending_payment", index: true },
+    internalNote: { type: String, trim: true, maxlength: 2000 }, // staff only, never shown to the customer
     /** Where the customer pays. providerOrderId is the bank's id, used to read the real payment status. */
     payment: {
       provider: { type: String, enum: ["bog"] },

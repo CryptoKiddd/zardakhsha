@@ -55,6 +55,13 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
     reserved.push({ sku: line.sku, qty: line.quantity });
   }
 
+  // Unit costs for profit reporting, read here on the server (never part of the bag sent to the browser).
+  const costDocs = await Product.find(
+    { "variants.sku": { $in: cart.lines.map((l) => l.sku) } },
+    { "variants.sku": 1, "variants.cost": 1 },
+  ).lean();
+  const costBySku = new Map(costDocs.flatMap((p) => p.variants.map((v) => [v.sku, v.cost ?? undefined] as const)));
+
   const number = `ZK-${randomInt(100000, 999999)}`;
   const total = cart.subtotal + shipping;
   await Order.create({
@@ -68,6 +75,7 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
       variantLabel: l.variantLabel,
       image: l.image.url,
       price: l.price,
+      unitCost: costBySku.get(l.sku),
       quantity: l.quantity,
     })),
     subtotal: cart.subtotal,
