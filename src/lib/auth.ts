@@ -18,6 +18,7 @@ import {
   SESSION_REFRESH_S,
 } from "@/config/auth";
 import { escapeHtml, sendEmail, sendSms } from "./messaging";
+import { siteUrl, trustedOrigins } from "./site";
 
 /**
  * Better Auth (the maintained successor to Auth.js). Three passwordless ways in:
@@ -31,7 +32,10 @@ function createAuth() {
 
   return betterAuth({
     secret: process.env.BETTER_AUTH_SECRET,
-    baseURL: process.env.BETTER_AUTH_URL,
+    // Resolved per environment (see lib/site.ts): on Vercel this is the deployed domain, never localhost,
+    // so Google redirects back to the site the customer is on.
+    baseURL: siteUrl(),
+    trustedOrigins: trustedOrigins(),
     database: mongodbAdapter(client.db(), { client }),
     user: {
       additionalFields: {
