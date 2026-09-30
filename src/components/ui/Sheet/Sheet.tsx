@@ -9,8 +9,12 @@ type SheetProps = {
   open: boolean;
   onClose: () => void;
   title: string;
-  /** bottom = mobile bottom sheet (filters, size guide). left = side drawer (burger menu). */
-  side?: "bottom" | "left";
+  /**
+   * bottom: mobile action sheet (filters, size guide, quick add).
+   * left: navigation drawer (burger menu), because it opens from the button on the left.
+   * right: detail / edit drawer (order detail, admin edits, desktop panels), slides in from the right.
+   */
+  side?: "bottom" | "left" | "right";
   /** Replace the default title row (e.g. the drawer shows the logo). */
   header?: ReactNode;
   /** Pinned below the scrolling body, e.g. the sheet's main action. */

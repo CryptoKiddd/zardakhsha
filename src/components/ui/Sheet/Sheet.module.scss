@@ -50,6 +50,18 @@
   }
 }
 
+.right {
+  margin: 0 0 0 auto;
+  height: 100dvh;
+  width: min(92vw, 440px);
+
+  .panel {
+    height: 100%;
+    border-radius: var(--radius-lg) 0 0 var(--radius-lg);
+    animation: slide-left var(--dur-base) var(--ease-out);
+  }
+}
+
 .handle {
   align-self: center;
   width: 40px;
@@ -97,6 +109,12 @@
 @keyframes slide-up {
   from {
     transform: translateY(100%);
+  }
+}
+
+@keyframes slide-left {
+  from {
+    transform: translateX(100%);
   }
 }
 
