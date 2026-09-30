@@ -5,8 +5,25 @@
   grid-template-columns: 1fr 1fr;
   gap: var(--space-3);
 
+  // An odd last tile (5 categories) spans the row instead of leaving a gap.
+  > li:last-child:nth-child(odd) {
+    grid-column: 1 / -1;
+
+    .tile {
+      aspect-ratio: 2 / 1;
+    }
+  }
+
   @include up(md) {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(5, 1fr);
+
+    > li:last-child:nth-child(odd) {
+      grid-column: auto;
+
+      .tile {
+        aspect-ratio: 1;
+      }
+    }
   }
 }
 

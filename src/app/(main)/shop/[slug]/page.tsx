@@ -20,6 +20,7 @@ const PAGES: Record<string, { title: string; subtitle: string }> = {
   earrings: { title: "Earrings", subtitle: "Drops, studs and hoops, light enough for every day." },
   bracelets: { title: "Bracelets", subtitle: "Cuffs and bangles fired with Georgian enamel." },
   pendants: { title: "Pendants", subtitle: "Miniature enamel paintings on a silver chain." },
+  decorations: { title: "Decorations", subtitle: "Enamel vases, plant pots, plates and boxes for the home." },
   silver: { title: "Silver Collection", subtitle: "Every piece in hallmarked 925 sterling silver." },
   gold: { title: "Gold Collection", subtitle: "Every piece in warm gold." },
   gifts: { title: "Gift Guide", subtitle: "Pieces people remember, packed by hand in Tbilisi." },
@@ -52,7 +53,7 @@ export default async function ShopPage({ params, searchParams }: PageProps<"/sho
       </header>
 
       {CATEGORY_SLUGS.has(slug) && <CategoryTabs current={slug} state={state} />}
-      <FilterBar basePath={basePath} state={state} />
+      <FilterBar basePath={basePath} state={state} hideMetal={slug === "decorations"} />
 
       <div className={s.meta}>
         <Suspense key={`${slug}${JSON.stringify(state)}`} fallback={<p className={s.count}>&nbsp;</p>}>

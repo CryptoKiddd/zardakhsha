@@ -9,11 +9,7 @@ import type { ProductCardDTO } from "../types";
 import { QuickAdd } from "./QuickAdd";
 import s from "./SearchResults.module.scss";
 
-// Decorations aren't in the storefront menu yet (awaiting their design) but can still be found by search.
-const CATEGORY_LABEL: Record<string, string> = {
-  ...Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.label])),
-  decorations: "Decorations",
-};
+const CATEGORY_LABEL: Record<string, string> = Object.fromEntries(CATEGORIES.map((c) => [c.slug, c.label]));
 
 /** Search "Live Matches": compact rows (thumb + details + add), so more results fit above the fold than a grid. */
 export async function SearchResultList({ products }: { products: ProductCardDTO[] }) {

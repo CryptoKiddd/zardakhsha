@@ -11,6 +11,7 @@ const CHIPS: Chip[] = [
   { slug: "bracelets", label: "Bracelets", image: "/images/home/bracelets.jpg" },
   { slug: "pendants", label: "Pendants", image: "/images/home/pendants.jpg" },
   { slug: "earrings", label: "Earrings", image: "/images/home/earrings.jpg" },
+  { slug: "decorations", label: "Decor", image: "/images/home/decorations.jpg" },
   { slug: "silver", label: "Silver", glyph: "925" },
   { slug: "gold", label: "Gold", glyph: "24K" },
 ];

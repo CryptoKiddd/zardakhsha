@@ -9,13 +9,22 @@ import s from "./Filters.module.scss";
  * Applied filters come first as filled chips with ✕; suggestions follow as outlines. So the same row
  * shows what's on, removes it in one tap, and offers the most-used filters without opening anything.
  */
-export function FilterBar({ basePath, state }: { basePath: string; state: ListingState }) {
+export function FilterBar({
+  basePath,
+  state,
+  hideMetal = false,
+}: {
+  basePath: string;
+  state: ListingState;
+  /** Decorations have no precious metal, so metal filters would only lead to empty results. */
+  hideMetal?: boolean;
+}) {
   const applied = activeFilters(state);
-  const suggestions = QUICK_FILTERS.filter((q) => state[q.key] !== q.value);
+  const suggestions = QUICK_FILTERS.filter((q) => state[q.key] !== q.value && !(hideMetal && q.key === "metal"));
 
   return (
     <div className={s.bar}>
-      <FilterSheet basePath={basePath} state={state} activeCount={applied.length} />
+      <FilterSheet basePath={basePath} state={state} activeCount={applied.length} hideMetal={hideMetal} />
       <ul className={s.chips} aria-label="Quick filters">
         {applied.map((f) => (
           <li key={f.key}>

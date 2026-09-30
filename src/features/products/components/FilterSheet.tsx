@@ -29,10 +29,12 @@ export function FilterSheet({
   basePath,
   state,
   activeCount,
+  hideMetal = false,
 }: {
   basePath: string;
   state: ListingState;
   activeCount: number;
+  hideMetal?: boolean;
 }) {
   const router = useRouter();
   const [open, setOpen] = useState(false);
@@ -70,7 +72,7 @@ export function FilterSheet({
 
       <Sheet open={open} onClose={() => setOpen(false)} title="Filters">
         <div className={s.sheet}>
-          {GROUPS.map((g) => {
+          {GROUPS.filter((g) => !(hideMetal && g.key === "metal")).map((g) => {
             const current = draft[g.key] ?? (g.key === "sort" ? "featured" : "");
             const options = g.any ? [{ value: "", label: g.any }, ...g.options] : g.options;
             return (
