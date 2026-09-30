@@ -24,7 +24,6 @@ const customerSchema = new Schema(
     // Admin-only customer management
     tags: { type: [String], default: [] }, // e.g. "vip", "wholesale"
     note: { type: String, trim: true, maxlength: 2000 },
-    blocked: { type: Boolean, default: false },
   },
   { timestamps: true },
 );
