@@ -13,6 +13,7 @@ import mongoose from "mongoose";
 import { allowedFrom, isOrderStatus, STATUS_LABEL, TRANSITIONS, type OrderStatus } from "../src/config/order-status";
 import { Order } from "../src/models/Order";
 import { Product } from "../src/models/Product";
+import { StockMovement } from "../src/models/StockMovement";
 
 function fail(message: string): never {
   console.error(message);
@@ -53,6 +54,16 @@ async function main() {
       for (const line of order.lines) {
         await Product.updateOne({ "variants.sku": line.sku }, { $inc: { "variants.$.stock": line.quantity } });
       }
+      await StockMovement.insertMany(
+        order.lines.map((l) => ({
+          product: l.product,
+          sku: l.sku,
+          delta: l.quantity,
+          reason: "order_cancelled",
+          orderNumber: number,
+          note: "Cancelled with scripts/order-status.ts",
+        })),
+      );
     }
 
     console.log(`${number}: ${STATUS_LABEL[from]} → ${STATUS_LABEL[to]}`);

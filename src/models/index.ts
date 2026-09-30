@@ -13,3 +13,4 @@ export {
   type ProductDoc,
 } from "./Product";
 export { FIT_VALUES, Review, type ReviewDoc } from "./Review";
+export { STOCK_REASONS, StockMovement, type StockMovementDoc } from "./StockMovement";

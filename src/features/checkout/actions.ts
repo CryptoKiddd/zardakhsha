@@ -15,7 +15,7 @@ import { getSession } from "@/lib/auth";
 import { createBogOrder, isBogConfigured } from "@/lib/payments/bog";
 import { siteUrl } from "@/lib/site";
 import { connectDb } from "@/lib/db";
-import { Cart, Order, Product } from "@/models";
+import { Cart, Order, Product, StockMovement } from "@/models";
 
 export type CheckoutState = {
   message?: string;
@@ -85,6 +85,15 @@ export async function placeOrder(_prev: CheckoutState, formData: FormData): Prom
     status: "pending_payment",
     statusHistory: [{ status: "pending_payment", at: new Date() }],
   });
+  await StockMovement.insertMany(
+    cart.lines.map((l) => ({
+      product: l.productId,
+      sku: l.sku,
+      delta: -l.quantity,
+      reason: "sale",
+      orderNumber: number,
+    })),
+  );
 
   // Open the payment at Bank of Georgia. The callback / return trip settles it (features/orders/payments.ts).
   let paymentUrl: string | null = null;

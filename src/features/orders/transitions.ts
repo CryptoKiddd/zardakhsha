@@ -1,7 +1,7 @@
 import "server-only";
 import { allowedFrom, type OrderStatus } from "@/config/order-status";
 import { connectDb } from "@/lib/db";
-import { Order, Product, type OrderDoc } from "@/models";
+import { Order, Product, StockMovement, type OrderDoc } from "@/models";
 
 /**
  * Moves an order to `to` only if that's a legal step from where it is now (config/order-status.ts).
@@ -21,6 +21,15 @@ export async function transitionOrder(number: string, to: OrderStatus): Promise<
     for (const line of updated.lines) {
       await Product.updateOne({ "variants.sku": line.sku }, { $inc: { "variants.$.stock": line.quantity } });
     }
+    await StockMovement.insertMany(
+      updated.lines.map((l) => ({
+        product: l.product,
+        sku: l.sku,
+        delta: l.quantity,
+        reason: "order_cancelled",
+        orderNumber: number,
+      })),
+    );
   }
   return true;
 }
