@@ -13,6 +13,7 @@ import {
   PHONE_OTP_TTL_S,
   PHONE_SIGNUP_NAME,
   placeholderEmail,
+  type UserRole,
   SESSION_MAX_AGE_S,
   SESSION_REFRESH_S,
 } from "@/config/auth";
@@ -32,6 +33,12 @@ function createAuth() {
     secret: process.env.BETTER_AUTH_SECRET,
     baseURL: process.env.BETTER_AUTH_URL,
     database: mongodbAdapter(client.db(), { client }),
+    user: {
+      additionalFields: {
+        // input: false → clients can't set it at sign-up; only server code (admin panel) changes it.
+        role: { type: "string", required: false, defaultValue: "customer" satisfies UserRole, input: false },
+      },
+    },
     socialProviders: {
       google: {
         clientId: process.env.GOOGLE_CLIENT_ID ?? "",

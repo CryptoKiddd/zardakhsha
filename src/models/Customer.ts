@@ -21,6 +21,10 @@ const customerSchema = new Schema(
     phone: { type: String, trim: true },
     addresses: { type: [addressSchema], default: [] },
     wishlist: { type: [{ type: Schema.Types.ObjectId, ref: "Product" }], default: [] },
+    // Admin-only customer management
+    tags: { type: [String], default: [] }, // e.g. "vip", "wholesale"
+    note: { type: String, trim: true, maxlength: 2000 },
+    blocked: { type: Boolean, default: false },
   },
   { timestamps: true },
 );

@@ -47,5 +47,12 @@ export function isPlaceholderEmail(email: string | null | undefined): boolean {
   return !!email && email.endsWith(`@${PLACEHOLDER_DOMAIN}`);
 }
 
+/**
+ * Who may do what. Everyone signs up as "customer"; staff roles are granted by an owner (admin panel),
+ * never through a sign-up form.
+ */
+export const USER_ROLES = ["customer", "owner", "manager", "fulfilment"] as const;
+export type UserRole = (typeof USER_ROLES)[number];
+
 /** Name for phone sign-ups. Not the phone number: first names are shown publicly on reviews. */
 export const PHONE_SIGNUP_NAME = "Customer";
