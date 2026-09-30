@@ -43,6 +43,40 @@
   }
 }
 
+// Decorations: size and weight as a quiet two-column spec list (no line breaks, values right-aligned).
+.specs {
+  display: grid;
+  border-block: 1px solid var(--color-border);
+
+  > div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-3);
+    min-height: var(--tap-min);
+
+    & + div {
+      border-top: 1px solid var(--color-border);
+    }
+  }
+
+  dt {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    @include text(sm);
+    color: var(--color-muted);
+    white-space: nowrap;
+  }
+
+  dd {
+    @include text(sm);
+    font-weight: 600;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+}
+
 .barPrice {
   flex-shrink: 0;
   font-weight: 700;

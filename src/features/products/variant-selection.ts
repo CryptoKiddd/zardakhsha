@@ -17,6 +17,16 @@ export const RING_SIZE_MM: Record<string, string> = {
   "9": "59.5",
 };
 
+/** "18 × 32 cm" from mm, dropping missing sides; one decimal only when needed. */
+export function formatDimensions(d: { widthMm?: number; heightMm?: number; depthMm?: number }): string {
+  const cm = (mm: number) => String(Math.round(mm / 10) === mm / 10 ? mm / 10 : (mm / 10).toFixed(1));
+  return [d.widthMm, d.heightMm, d.depthMm]
+    .filter((v): v is number => !!v)
+    .map(cm)
+    .join(" × ")
+    .concat(" cm");
+}
+
 function unique<T>(items: T[], key: (t: T) => string): T[] {
   return [...new Map(items.map((i) => [key(i), i])).values()];
 }

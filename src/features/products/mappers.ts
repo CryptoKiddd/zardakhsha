@@ -12,6 +12,15 @@ function variants(p: LeanProduct): VariantDTO[] {
     price: v.price,
     compareAtPrice: v.compareAtPrice ?? undefined,
     stock: v.stock,
+    // Only customer-facing facts; cost is deliberately never mapped.
+    dimensions: v.dimensions?.heightMm
+      ? {
+          widthMm: v.dimensions.widthMm ?? undefined,
+          heightMm: v.dimensions.heightMm ?? undefined,
+          depthMm: v.dimensions.depthMm ?? undefined,
+        }
+      : undefined,
+    weightGrams: v.weightGrams ?? undefined,
   }));
 }
 

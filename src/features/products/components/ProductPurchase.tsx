@@ -9,7 +9,7 @@ import { notifyAddedToBag } from "@/features/cart/notify";
 import { WishlistButton } from "@/features/wishlist/components/WishlistButton";
 import { formatPrice } from "@/lib/format";
 import type { ProductDetailDTO } from "../types";
-import { useVariantSelection } from "../variant-selection";
+import { formatDimensions, useVariantSelection } from "../variant-selection";
 import { SizeOptions, VariantOptions } from "./VariantOptions";
 import s from "./ProductPurchase.module.scss";
 
@@ -41,6 +41,25 @@ export function ProductPurchase({ product, saved }: { product: ProductDetailDTO;
       <Price amount={sel.display.price} compareAt={sel.display.compareAtPrice} size="lg" className={s.price} />
 
       <VariantOptions selection={sel} onSizeGuide={() => setSizeSheetOpen(true)} />
+
+      {(sel.display.dimensions || sel.display.weightGrams) && (
+        <dl className={s.specs}>
+          {sel.display.dimensions && (
+            <div>
+              <dt>
+                <Icon name="ruler" size={18} /> Size
+              </dt>
+              <dd>{formatDimensions(sel.display.dimensions)}</dd>
+            </div>
+          )}
+          {sel.display.weightGrams && (
+            <div>
+              <dt>Weight</dt>
+              <dd>{sel.display.weightGrams} g</dd>
+            </div>
+          )}
+        </dl>
+      )}
 
       {sel.selected && sel.selected.stock > 0 && sel.selected.stock <= LOW_STOCK_AT && (
         <p className={s.lowStock}>

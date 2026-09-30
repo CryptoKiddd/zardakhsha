@@ -13,6 +13,9 @@ export type VariantDTO = {
   price: number;
   compareAtPrice?: number;
   stock: number;
+  /** Decorations: physical size (mm) and weight instead of a ring size. */
+  dimensions?: { widthMm?: number; heightMm?: number; depthMm?: number };
+  weightGrams?: number;
 };
 
 export type ProductCardDTO = {
