@@ -34,7 +34,32 @@ type Seed = {
   badges?: string[];
   featured?: boolean;
   sized?: boolean;
+  audience?: "women" | "men" | "unisex";
+  /** Demo of the second sourcing type; everything else is made in-house. */
+  purchasedFrom?: string;
 };
+
+// Demo costing (tetri): in-house = materials + labour + packaging; gold adds plating material.
+const LABOUR_RATE = 20_00; // ₾20 / hour
+const PACKAGING = 5_00;
+
+function costing(seed: Seed, metal: "silver" | "gold") {
+  if (seed.purchasedFrom) {
+    const purchasePrice = Math.round(seed.price * 100 * 0.55);
+    return {
+      unit: purchasePrice + 3_00,
+      sourcing: { type: "purchased", supplier: seed.purchasedFrom, purchasePrice, extraCosts: 3_00 },
+    };
+  }
+  const materials =
+    Math.round(seed.price * 100 * 0.3) + (metal === "gold" ? Math.round((seed.goldExtra ?? 0) * 100 * 0.6) : 0);
+  const labourMinutes = seed.sized ? 150 : 90;
+  const labour = Math.round((labourMinutes / 60) * LABOUR_RATE);
+  return {
+    unit: materials + labour + PACKAGING,
+    sourcing: { type: "in_house", materials, labourMinutes, labourRatePerHour: LABOUR_RATE, packaging: PACKAGING },
+  };
+}
 
 const SEEDS: Seed[] = [
   {
@@ -118,6 +143,7 @@ const SEEDS: Seed[] = [
   },
   {
     slug: "vine-hoops",
+    purchasedFrom: "Tbilisi Filigree Workshop",
     name: "Vine Hoop Earrings",
     category: "earrings",
     collections: ["vine"],
@@ -161,6 +187,7 @@ function build(seed: Seed) {
         size,
         price: (seed.price + (metal === "gold" ? (seed.goldExtra ?? 0) : 0)) * 100,
         compareAtPrice: seed.compareAt ? seed.compareAt * 100 : undefined,
+        cost: costing(seed, metal).unit,
         stock: i === 0 ? 2 : 8, // smallest size low-stock → shows the "Only 2 left" nudge
       })),
     ),
@@ -173,6 +200,8 @@ function build(seed: Seed) {
     name: seed.name,
     description: `${seed.name}, handmade in our Tbilisi atelier. Glass enamel is hand-filled into ${seed.metals.join(" or ")} and kiln-fired, so every piece has its own character.`,
     category: seed.category,
+    audience: seed.audience ?? (seed.category === "bracelets" ? "unisex" : "women"),
+    sourcing: costing(seed, seed.metals[0]!).sourcing,
     collections: seed.collections,
     images,
     variants,
