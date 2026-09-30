@@ -2,7 +2,8 @@
 
 # Zardakhsha: Georgian enamel jewelry shop
 
-Mobile-first e-commerce for handmade enamel jewelry (rings, earrings, bracelets, pendants) in silver and gold.
+Mobile-first e-commerce for handmade enamel jewelry (rings, earrings, bracelets, pendants) in silver and gold,
+plus enamel decorations for the home (vases, plant pots, plates, boxes).
 The goal of every screen is **conversion**: fast, clear, one obvious next action.
 
 ## Stack
@@ -18,7 +19,10 @@ The goal of every screen is **conversion**: fast, clear, one obvious next action
 npm run dev          # http://localhost:3000
 npm run check        # typecheck + lint + prettier: run before every commit
 npm run build        # production build (must pass)
-npm run seed         # demo products + reviews (needs .env.local)
+npm run seed         # demo products + reviews + decorations (wipes products; reads .env / .env.local)
+npm run seed:decorations  # upsert only the demo decorations (safe, touches nothing else)
+npm run db:migrate   # add missing defaults + indexes after schema changes (never deletes)
+npm run order:status -- ZK-123456 [status]  # show / move an order along its lifecycle
 npm run format       # prettier --write
 ```
 
@@ -115,5 +119,6 @@ Before finishing any change, run the review in `.claude/skills/code-review/SKILL
 
 - Payments: Bank of Georgia in `lib/payments/bog.ts` (checkout → BOG hosted page → callback `/api/payments/bog` + order-page sync, both re-read status from BOG). Needs `BOG_CLIENT_ID` / `BOG_CLIENT_SECRET`; verify field names against BOG's docs when onboarding.
 - Admin panel (product CRUD, image upload to Cloudinary/R2, orders) is phase 2: plan it as `app/(admin)/admin/*` behind a role check.
-- Wishlist action and newsletter subscribe are UI-only placeholders.
+- Newsletter subscribe is a UI-only placeholder.
+- Role restrictions (owner / manager / fulfilment on `user.role`) are stored but not enforced yet: add with the admin panel.
 - Consider `cacheComponents` + `"use cache"` for product queries once the catalog is stable.
