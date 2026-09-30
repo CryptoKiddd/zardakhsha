@@ -46,6 +46,7 @@
 
   .panel {
     height: 100%;
+    border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
     animation: slide-right var(--dur-base) var(--ease-out);
   }
 }

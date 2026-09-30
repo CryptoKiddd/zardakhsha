@@ -1,28 +1,193 @@
 @use "abstracts" as *;
 
-.link {
+.menu {
+  display: grid;
+  gap: var(--space-5);
+}
+
+// Looks like a search field, but it's a link: the real search (live results, recent searches) is /search.
+.search {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  min-height: var(--tap-min);
+  gap: var(--space-2);
+  min-height: 48px;
+  padding-inline: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  @include text(sm);
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition: border-color var(--dur-fast) var(--ease-out);
 
-  &[aria-current="page"] {
-    color: var(--color-accent);
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--color-text);
+    }
   }
 }
 
-.large .link {
-  @include heading(lg);
-  min-height: 52px;
+.label {
+  margin-bottom: var(--space-2);
+  @include eyebrow;
+  font-weight: 600;
 }
 
-.small .link {
-  @include text(sm);
+// ── Categories: one card, equal rows ───────────────────────
+.categories {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+  overflow: hidden;
+
+  li + li {
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 56px;
+  padding-inline: var(--space-2) var(--space-3);
+  transition: background-color var(--dur-fast) var(--ease-out);
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--color-surface-alt);
+    }
+  }
+
+  &[aria-current] {
+    background: var(--color-accent-soft);
+
+    .name {
+      font-weight: 600;
+    }
+  }
+}
+
+.thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-surface-alt);
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.name {
+  flex: 1;
+  min-width: 0;
+  @include text(md);
+  font-weight: 500;
+  @include line-clamp(1);
+}
+
+.chevron {
+  flex-shrink: 0;
   color: var(--color-muted);
 }
 
-.divider {
-  border: 0;
-  border-top: 1px solid var(--color-border);
-  margin-block: var(--space-3);
+// ── Collections: an even 2 × 2 grid (a wrapped row would leave one pill stranded) ──
+.pills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.pill {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 40px;
+  padding-inline: var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface);
+  @include text(sm);
+  white-space: nowrap;
+  transition:
+    border-color var(--dur-fast) var(--ease-out),
+    background-color var(--dur-fast) var(--ease-out);
+
+  @media (hover: hover) {
+    &:hover {
+      border-color: var(--color-text);
+    }
+  }
+
+  &[aria-current] {
+    border-color: var(--color-accent);
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+}
+
+// ── Atelier links ──────────────────────────────────────────
+.links {
+  display: grid;
+}
+
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: var(--tap-min);
+  @include text(sm);
+  white-space: nowrap;
+
+  &[aria-current] {
+    font-weight: 600;
+  }
+}
+
+.linkIcon {
+  color: var(--color-gold-text);
+}
+
+// ── Pinned account tabs (Sheet footer) ─────────────────────
+.accountNav {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-2);
+  width: 100%;
+}
+
+.accountTab {
+  display: grid;
+  justify-items: center;
+  gap: 2px;
+  padding-block: var(--space-2);
+  border-radius: var(--radius-sm);
+  @include text(xs);
+  font-weight: 500;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+
+  svg {
+    color: var(--color-text);
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      background: var(--color-surface-alt);
+      color: var(--color-text);
+    }
+  }
+
+  &[aria-current] {
+    background: var(--color-accent-soft);
+    color: var(--color-text);
+    font-weight: 600;
+  }
 }

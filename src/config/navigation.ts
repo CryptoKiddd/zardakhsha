@@ -50,11 +50,25 @@ export const MENU_SECONDARY: NavLink[] = [
   { label: "Contact", href: "/contact" },
 ];
 
+/** Menu drawer: collections as one row of pills. */
+export const MENU_COLLECTIONS: NavLink[] = [
+  { label: "New In", href: routes.shop("new") },
+  { label: "Silver", href: routes.shop("silver") },
+  { label: "Gold", href: routes.shop("gold") },
+  { label: "Gift Guide", href: routes.shop("gifts") },
+];
+
+/** Menu drawer: about the shop. */
+export const MENU_ATELIER: NavLink[] = [
+  { label: "About the Atelier", href: "/about" },
+  { label: "Contact", href: "/contact" },
+];
+
+/** Menu drawer: pinned account tabs (addresses live inside My account). */
 export const MENU_ACCOUNT: NavLink[] = [
-  { label: "My Account", href: "/account" },
+  { label: "Account", href: "/account" },
   { label: "Orders", href: "/account/orders" },
   { label: "Saved", href: "/account/wishlist" },
-  { label: "Addresses", href: "/account/addresses" },
 ];
 
 /**
