@@ -7,7 +7,8 @@ import { CategoryChips } from "@/features/products/components/CategoryChips";
 import { FeaturedWorks, FeaturedWorksSkeleton } from "@/features/products/components/FeaturedWorks";
 import { ProductCarousel } from "@/features/products/components/ProductGrid";
 import { ProductGridSkeleton } from "@/features/products/components/ProductGridSkeleton";
-import { getFeatured, getFeaturedWorks } from "@/features/products/queries";
+import { getDecorationShowcase, getFeatured, getFeaturedWorks } from "@/features/products/queries";
+import { DecorSpotlight } from "@/features/products/components/DecorShowcase";
 import { ReviewQuote } from "@/features/reviews/components/ReviewQuote";
 import { getHomeReviews, getStoreRating } from "@/features/reviews/queries";
 import { HeroCarousel, type HeroSlide } from "@/features/marketing/components/HeroCarousel";
@@ -97,6 +98,16 @@ export default function HomePage() {
           }
         >
           <Bestsellers />
+        </Suspense>
+
+        <Suspense
+          fallback={
+            <DecorSection>
+              <ProductGridSkeleton carousel />
+            </DecorSection>
+          }
+        >
+          <Decorations />
         </Suspense>
 
         <section className={s.story}>
@@ -191,6 +202,29 @@ function BestsellersSection({ children }: { children: React.ReactNode }) {
     >
       {children}
     </Section>
+  );
+}
+
+function DecorSection({ children }: { children: React.ReactNode }) {
+  return (
+    <Section
+      title="For the home"
+      eyebrow="Decorations"
+      action={{ label: "Shop all", href: routes.shop("decorations") }}
+    >
+      {children}
+    </Section>
+  );
+}
+
+async function Decorations() {
+  const { spotlight, more } = await getDecorationShowcase();
+  if (spotlight.length + more.length === 0) return null;
+  return (
+    <DecorSection>
+      <DecorSpotlight products={spotlight} />
+      {more.length > 0 && <ProductCarousel products={more} label="More decorations" />}
+    </DecorSection>
   );
 }
 

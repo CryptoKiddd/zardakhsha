@@ -146,3 +146,17 @@ export async function getComplements(excludeProductIds: string[], limit = 6): Pr
     .lean<ProductDoc[]>();
   return docs.map(toProductCard);
 }
+
+/** Home "For the home" showcase: spotlight pieces (collection "decor-spotlight") + the other decorations. */
+export async function getDecorationShowcase(): Promise<{ spotlight: ProductCardDTO[]; more: ProductCardDTO[] }> {
+  await readDb();
+  const docs = await Product.find({ isPublished: true, category: "decorations" })
+    .sort({ featured: -1, createdAt: -1 })
+    .limit(12)
+    .lean<ProductDoc[]>();
+  const isSpotlight = (d: ProductDoc) => d.collections.includes("decor-spotlight");
+  return {
+    spotlight: docs.filter(isSpotlight).slice(0, 2).map(toProductCard),
+    more: docs.filter((d) => !isSpotlight(d)).map(toProductCard),
+  };
+}

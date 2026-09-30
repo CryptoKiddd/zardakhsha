@@ -1,0 +1,74 @@
+@use "abstracts" as *;
+
+.spotlight {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-3);
+  margin-bottom: var(--space-5);
+
+  @include up(md) {
+    gap: var(--space-4);
+  }
+}
+
+.tile {
+  position: relative;
+  display: block;
+  aspect-ratio: 4 / 5;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--gradient-sheen);
+  box-shadow: var(--shadow-sm);
+  isolation: isolate;
+  transition:
+    box-shadow var(--dur-base) var(--ease-out),
+    transform var(--dur-base) var(--ease-out);
+
+  @include up(md) {
+    aspect-ratio: 5 / 4;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+
+      .image {
+        transform: scale(1.04);
+      }
+    }
+  }
+}
+
+.image {
+  object-fit: cover;
+  z-index: -1;
+  transition: transform 600ms var(--ease-out);
+}
+
+// Frosted caption pinned to the bottom: name on one line, price + arrow beneath (never wraps the tile).
+.caption {
+  position: absolute;
+  inset: auto var(--space-2) var(--space-2);
+  display: grid;
+  gap: 2px;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-surface) 86%, transparent);
+  backdrop-filter: blur(8px);
+}
+
+.name {
+  @include text(sm);
+  @include line-clamp(1);
+  font-weight: 600;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  @include text(sm);
+  font-variant-numeric: tabular-nums;
+  color: var(--color-muted);
+}
