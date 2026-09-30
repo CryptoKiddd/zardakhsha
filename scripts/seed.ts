@@ -5,6 +5,7 @@
 import mongoose from "mongoose";
 import { Product } from "../src/models/Product";
 import { Review } from "../src/models/Review";
+import { upsertDecorations } from "./seed-decorations";
 
 const COLORS = {
   Cobalt: { hex: "#1F3A93", img: "cobalt" },
@@ -226,6 +227,7 @@ async function main() {
 
   await Promise.all([Product.deleteMany({}), Review.deleteMany({})]);
   const products = await Product.insertMany(SEEDS.map(build));
+  const decorations = await upsertDecorations();
   await Product.syncIndexes();
 
   for (const [i, p] of products.entries()) {
@@ -247,7 +249,7 @@ async function main() {
     await Product.updateOne({ _id: p._id }, { rating: { average: avg, count: n } });
   }
 
-  console.log(`Seeded ${products.length} products with reviews.`);
+  console.log(`Seeded ${products.length} jewelry pieces with reviews and ${decorations} decorations.`);
   await mongoose.disconnect();
 }
 
