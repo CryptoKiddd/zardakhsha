@@ -3,7 +3,7 @@
 
 import type { ProductDoc } from "@/models/Product";
 
-export type Metal = "silver" | "gold";
+export type Metal = "silver" | "gold" | "none";
 
 export type VariantDTO = {
   sku: string;

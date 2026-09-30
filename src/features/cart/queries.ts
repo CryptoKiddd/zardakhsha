@@ -33,7 +33,7 @@ export const getCart = cache(async (): Promise<CartDTO> => {
       slug: p.slug,
       name: p.name,
       variantLabel: variantLabel({
-        metal: v.metal as "silver" | "gold",
+        metal: v.metal as "silver" | "gold" | "none",
         enamelColor: { name: v.enamelColor!.name, hex: v.enamelColor!.hex },
         size: v.size ?? undefined,
       }),

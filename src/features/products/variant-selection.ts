@@ -2,7 +2,11 @@
 import { useState } from "react";
 import type { Metal, VariantDTO } from "./types";
 
-export const METAL_LABEL: Record<Metal, string> = { silver: "925 Sterling Silver", gold: "Gold-plated" };
+export const METAL_LABEL: Record<Metal, string> = {
+  silver: "925 Sterling Silver",
+  gold: "Gold-plated",
+  none: "Enamel only",
+};
 
 /** Inner circumference per ring size (US), shown on the size tiles and in the guide. */
 export const RING_SIZE_MM: Record<string, string> = {

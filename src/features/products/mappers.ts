@@ -15,13 +15,13 @@ function variants(p: LeanProduct): VariantDTO[] {
   }));
 }
 
-const METAL_LABEL = { silver: "925 silver", gold: "gold" } as const;
+const METAL_LABEL = { silver: "925 silver", gold: "gold", none: "" } as const;
 
 function subtitle(vs: VariantDTO[], colors: VariantDTO["enamelColor"][]): string {
   const metals = [...new Set(vs.map((v) => v.metal))];
   const metal = metals.length > 1 ? "Silver or gold" : METAL_LABEL[metals[0]!];
   const enamel = colors.length === 1 ? `${colors[0]!.name} enamel` : `${colors.length} enamel colors`;
-  return `${enamel} · ${metal}`;
+  return metal ? `${enamel} · ${metal}` : enamel;
 }
 
 export function toProductCard(p: LeanProduct): ProductCardDTO {
