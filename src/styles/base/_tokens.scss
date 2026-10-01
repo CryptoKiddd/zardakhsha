@@ -99,6 +99,11 @@
   --ease-out: cubic-bezier(0.2, 0.8, 0.2, 1);
   --dur-fast: 150ms;
   --dur-base: 250ms;
+  // Sheets & drawers: quick start that glides into place (iOS / Vaul curve), shorter exit.
+  --ease-sheet: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-sheet-out: cubic-bezier(0.4, 0, 1, 1);
+  --dur-sheet-in: 400ms;
+  --dur-sheet-out: 240ms;
 
   // Z-index scale (never use raw z-index numbers in components)
   --z-sticky: 10;
@@ -113,5 +118,7 @@
   :root {
     --dur-fast: 0ms;
     --dur-base: 0ms;
+    --dur-sheet-in: 0ms;
+    --dur-sheet-out: 0ms;
   }
 }

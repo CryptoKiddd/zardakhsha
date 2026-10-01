@@ -1,14 +1,27 @@
 @use "abstracts" as *;
 
+// Motion: the panel sits off its edge; Sheet.tsx sets [data-shown] one frame after opening, so the
+// whole slide is visible even if the first frame is slow (heavy content). Closing drops [data-shown] and
+// the same transition runs back. Transform + opacity only: no layout, so the height never changes mid-slide.
 .sheet {
   padding: 0;
   border: 0;
   background: transparent;
   max-width: none;
   max-height: none;
+  // The UA gives modal dialogs overflow: auto, which clips the panel while it is still off-screen,
+  // so it seems to pop in instead of sliding from the edge. The panel scrolls its own body.
+  overflow: visible;
 
   &::backdrop {
     background: var(--color-overlay);
+    opacity: 0;
+    transition: opacity var(--dur-sheet-out) ease-in;
+  }
+
+  &[data-shown]::backdrop {
+    opacity: 1;
+    transition: opacity var(--dur-sheet-in) ease-out;
   }
 }
 
@@ -17,6 +30,14 @@
   flex-direction: column;
   background: var(--color-surface);
   overflow: hidden;
+  will-change: transform;
+  transition: transform var(--dur-sheet-out) var(--ease-sheet-out);
+}
+
+// .sheet in the selector: outranks each side's resting `.side .panel` transform.
+.sheet[data-shown] .panel {
+  transform: none;
+  transition: transform var(--dur-sheet-in) var(--ease-sheet);
 }
 
 .bottom {
@@ -24,17 +45,28 @@
   width: 100%;
 
   .panel {
-    max-height: 88dvh;
+    // svh (not dvh): stays fixed while the phone's address bar shows/hides, so the sheet doesn't resize.
+    max-height: 88svh;
     border-radius: var(--radius-lg) var(--radius-lg) 0 0;
-    animation: slide-up var(--dur-base) var(--ease-out);
+    transform: translateY(100%);
   }
 
+  // Desktop: a centred dialog rises a little and fades in, instead of travelling up the whole screen.
   @include up(md) {
     margin: auto;
     width: min(560px, 100% - 2 * var(--gutter));
 
     .panel {
       border-radius: var(--radius-lg);
+      opacity: 0;
+      transform: translateY(var(--space-5)) scale(0.98);
+      transition-property: transform, opacity;
+    }
+
+    &[data-shown] .panel {
+      opacity: 1;
+      transform: none;
+      transition-property: transform, opacity;
     }
   }
 }
@@ -47,7 +79,7 @@
   .panel {
     height: 100%;
     border-radius: 0 var(--radius-lg) var(--radius-lg) 0;
-    animation: slide-right var(--dur-base) var(--ease-out);
+    transform: translateX(-100%);
   }
 }
 
@@ -59,7 +91,7 @@
   .panel {
     height: 100%;
     border-radius: var(--radius-lg) 0 0 var(--radius-lg);
-    animation: slide-left var(--dur-base) var(--ease-out);
+    transform: translateX(100%);
   }
 }
 
@@ -105,22 +137,4 @@
 
 .hasFooter .body {
   padding-bottom: var(--space-5);
-}
-
-@keyframes slide-up {
-  from {
-    transform: translateY(100%);
-  }
-}
-
-@keyframes slide-left {
-  from {
-    transform: translateX(100%);
-  }
-}
-
-@keyframes slide-right {
-  from {
-    transform: translateX(-100%);
-  }
 }
