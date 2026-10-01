@@ -23,6 +23,8 @@ npm run seed         # demo products + reviews + decorations (wipes products; re
 npm run seed:decorations  # upsert only the demo decorations (safe, touches nothing else)
 npm run db:migrate   # add missing defaults + indexes after schema changes (never deletes)
 npm run order:status -- ZK-123456 [status]  # show / move an order along its lifecycle
+npm run user:role -- you@example.com owner  # grant / remove admin access (owner, manager, fulfilment, customer)
+npm run seed:orders  # demo orders for the admin dashboard (`-- --clear` removes only those)
 npm run format       # prettier --write
 ```
 
@@ -34,6 +36,7 @@ src/
 │   ├── (main)/                 # Header A: home, shop/[slug], account (dashboard)
 │   ├── (inner)/                # Header B: product/[slug], reviews, search, bag, login, account/*, about, contact
 │   ├── (checkout)/             # Header C: checkout, order/[number] (no back arrow)
+│   ├── (admin)/admin/          # Admin (desktop only, ≥1280px, designed for 1920×1080): own shell, staff roles only
 │   ├── api/auth/[...all]/      # Better Auth handler
 │   ├── layout.tsx              # <html>, fonts, globals.scss
 │   ├── not-found.tsx / error.tsx
@@ -75,6 +78,9 @@ src/
 - Back arrow: `router.back()` if the user came from inside the shop, else `backFallback()` in `config/navigation.ts`.
 - `StickyActionBar` (bottom) is for **actions** only (Add to Bag / Checkout / Pay / Write a review) on product, reviews, bag, checkout. Wrap the page in `<WithActionBar>`.
 - Sticky sub-bars (filters) stick at `top: var(--header-h)`: **below** the header, never over it.
+- **Admin** (`/admin`) is separate from the storefront: `AdminShell` (sidebar + top bar), no storefront header,
+  footer or action bar. Every admin page and action calls `requireStaff()`; layouts alone aren't a security
+  boundary (they don't re-run on client navigation). Unbuilt sections show "Soon" in the sidebar, never dead links.
 
 ## React / Next.js rules
 
@@ -120,5 +126,7 @@ Before finishing any change, run the review in `.claude/skills/code-review/SKILL
 - Payments: Bank of Georgia in `lib/payments/bog.ts` (checkout → BOG hosted page → callback `/api/payments/bog` + order-page sync, both re-read status from BOG). Needs `BOG_CLIENT_ID` / `BOG_CLIENT_SECRET`; verify field names against BOG's docs when onboarding.
 - Admin panel (product CRUD, image upload to Cloudinary/R2, orders) is phase 2: plan it as `app/(admin)/admin/*` behind a role check.
 - Newsletter subscribe is a UI-only placeholder.
-- Role restrictions (owner / manager / fulfilment on `user.role`) are stored but not enforced yet: add with the admin panel.
+- Admin: only the Dashboard exists. Next: orders, products (editor + costs), stock, transactions, customers,
+  storefront control, promotions, reviews, settings, team. Per-role permissions inside the admin are not split
+  yet (any staff role sees everything).
 - Consider `cacheComponents` + `"use cache"` for product queries once the catalog is stable.
