@@ -29,7 +29,12 @@ h3 {
   color: var(--color-accent-contrast);
 }
 
-// Stop background scroll while a drawer/sheet is open.
+// Stop background scroll while a drawer/sheet is open. The scrollbar's space stays reserved,
+// so locking scroll doesn't shift the page sideways on desktop.
+html {
+  scrollbar-gutter: stable;
+}
+
 body:has(dialog[open]) {
   overflow: hidden;
 }
