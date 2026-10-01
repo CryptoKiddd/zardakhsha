@@ -13,6 +13,8 @@
     "check": "npm run typecheck && npm run lint && npm run format:check",
     "seed": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/seed.ts",
     "seed:decorations": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/seed-decorations.ts",
+    "seed:orders": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/seed-orders.ts",
+    "user:role": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/set-role.ts",
     "db:migrate": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/migrate.ts",
     "order:status": "tsx --env-file-if-exists=.env --env-file-if-exists=.env.local scripts/order-status.ts"
   },
