@@ -1,0 +1,219 @@
+@use "abstracts" as *;
+
+$sidebar-w: 272px;
+$desktop: 1280px; // the admin needs at least this width
+
+.shell {
+  display: none;
+  min-height: 100dvh;
+  background: var(--color-bg);
+
+  @media (min-width: $desktop) {
+    display: grid;
+    grid-template-columns: $sidebar-w minmax(0, 1fr);
+  }
+}
+
+// ── Sidebar ─────────────────────────────────────────────────
+.sidebar {
+  position: sticky;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100dvh;
+  padding: var(--space-5) var(--space-4);
+  border-right: 1px solid var(--color-border);
+  background: var(--color-surface);
+  overflow-y: auto;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 0 var(--space-2) var(--space-5);
+}
+
+.brandTag {
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  @include text(xs);
+  font-weight: 600;
+  color: var(--color-gold-text);
+}
+
+.nav {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.navGroup ul {
+  display: grid;
+  gap: 2px;
+}
+
+.navHeading {
+  margin-bottom: var(--space-2);
+  padding-inline: var(--space-3);
+  @include eyebrow;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.navItem {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 40px;
+  padding-inline: var(--space-3);
+  border-radius: var(--radius-sm);
+  @include text(sm);
+  font-weight: 500;
+  color: var(--color-text);
+  white-space: nowrap;
+  transition: background-color var(--dur-fast) var(--ease-out);
+
+  svg {
+    flex-shrink: 0;
+    color: var(--color-muted);
+  }
+
+  @media (hover: hover) {
+    &:not([aria-disabled]):hover {
+      background: var(--color-surface-alt);
+    }
+  }
+
+  &[aria-current="page"] {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+
+    svg {
+      color: inherit;
+    }
+  }
+
+  &[aria-disabled] {
+    color: var(--color-muted);
+    cursor: default;
+  }
+}
+
+.soon {
+  margin-left: auto;
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  @include text(xs);
+  color: var(--color-muted);
+}
+
+// ── Top bar + content ───────────────────────────────────────
+.main {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: var(--z-header);
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-5);
+  height: 72px;
+  padding-inline: var(--space-7);
+  border-bottom: 1px solid var(--color-border);
+  background: color-mix(in srgb, var(--color-bg) 90%, transparent);
+  backdrop-filter: blur(12px);
+}
+
+.storefront {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  min-height: var(--tap-min);
+  @include text(sm);
+  font-weight: 600;
+  white-space: nowrap;
+
+  @media (hover: hover) {
+    &:hover {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+  }
+}
+
+.user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.avatar {
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--color-text);
+  color: var(--color-bg);
+  @include text(sm);
+  font-weight: 600;
+}
+
+.userText {
+  display: grid;
+}
+
+.userName {
+  @include text(sm);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.userRole {
+  @include text(xs);
+  color: var(--color-muted);
+}
+
+.content {
+  flex: 1;
+  width: 100%;
+  max-width: 1648px; // 1920 − sidebar: full HD uses the whole width
+  padding: var(--space-6) var(--space-7) var(--space-8);
+}
+
+// ── Narrow screens ──────────────────────────────────────────
+.desktopOnly {
+  display: grid;
+  justify-items: center;
+  place-content: center;
+  gap: var(--space-2);
+  min-height: 100dvh;
+  padding: var(--space-6);
+  text-align: center;
+  color: var(--color-muted);
+
+  @media (min-width: $desktop) {
+    display: none;
+  }
+
+  a {
+    margin-top: var(--space-3);
+    font-weight: 600;
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 3px;
+  }
+}
+
+.desktopTitle {
+  @include heading(xl);
+  color: var(--color-text);
+}
