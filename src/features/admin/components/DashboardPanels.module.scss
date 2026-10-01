@@ -1,0 +1,413 @@
+@use "abstracts" as *;
+
+// ── Panel frame ─────────────────────────────────────────────
+.panel {
+  display: grid;
+  align-content: start;
+  gap: var(--space-5);
+  min-width: 0;
+  padding: var(--space-5) var(--space-5) var(--space-5);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface);
+}
+
+.head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.title {
+  @include heading(xl);
+  white-space: nowrap;
+}
+
+.subtitle {
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.meta {
+  flex-shrink: 0;
+  @include text(sm);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.empty {
+  padding: var(--space-5);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  @include text(sm);
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.stack {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.muted {
+  @include text(xs);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+// ── Row lists (equal height, one line per text) ─────────────
+.rows {
+  display: grid;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-height: 60px;
+  padding-block: var(--space-2);
+
+  & + & {
+    border-top: 1px solid var(--color-border);
+  }
+}
+
+.rowMain {
+  display: grid;
+  flex: 1;
+  min-width: 0;
+}
+
+.rowTitle {
+  @include text(sm);
+  @include line-clamp(1);
+  font-weight: 600;
+}
+
+.rowSub {
+  @include text(xs);
+  @include line-clamp(1);
+  color: var(--color-muted);
+}
+
+.rowValue {
+  display: grid;
+  justify-items: end;
+  white-space: nowrap;
+
+  strong {
+    @include text(sm);
+    font-variant-numeric: tabular-nums;
+  }
+
+  span {
+    @include text(xs);
+    color: var(--color-muted);
+  }
+}
+
+.rank {
+  flex-shrink: 0;
+  width: 20px;
+  @include text(sm);
+  font-weight: 600;
+  color: var(--color-muted);
+  text-align: center;
+}
+
+.thumb {
+  position: relative;
+  flex-shrink: 0;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  background: var(--color-surface-alt);
+
+  img {
+    object-fit: cover;
+  }
+}
+
+.stockChip {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--color-gold) 16%, var(--color-surface));
+  @include text(xs);
+  font-weight: 600;
+  color: var(--color-gold-text);
+  white-space: nowrap;
+}
+
+.out {
+  background: color-mix(in srgb, var(--color-sale) 12%, var(--color-surface));
+  color: var(--color-sale-text);
+}
+
+// ── Orders ──────────────────────────────────────────────────
+.statusTiles {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.statusTile {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  column-gap: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+
+  svg {
+    grid-row: span 2;
+    color: var(--color-muted);
+  }
+}
+
+.statusCount {
+  font-size: var(--text-xl);
+  line-height: var(--leading-xl);
+  font-weight: 600;
+}
+
+.statusLabel {
+  @include text(xs);
+  color: var(--color-muted);
+  white-space: nowrap;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  @include text(sm);
+
+  th,
+  td {
+    height: 56px;
+    padding-inline: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
+    text-align: left;
+    white-space: nowrap;
+  }
+
+  tbody tr:last-child > * {
+    border-bottom: 0;
+  }
+
+  thead th {
+    height: 36px;
+    @include text(xs);
+    font-weight: 600;
+    color: var(--color-muted);
+  }
+
+  th:first-child,
+  td:first-child {
+    padding-left: 0;
+  }
+
+  th:last-child,
+  td:last-child {
+    padding-right: 0;
+    text-align: right;
+  }
+}
+
+.mono {
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+
+.num {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.table th:nth-child(3),
+.table th:nth-child(4) {
+  text-align: right;
+}
+
+.cellMain,
+.cellSub {
+  display: block;
+  max-width: 260px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cellSub {
+  @include text(xs);
+  color: var(--color-muted);
+}
+
+// Status chip: dot + label (never colour alone).
+.status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: 2px var(--space-2);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-alt);
+  @include text(xs);
+  font-weight: 600;
+
+  &::before {
+    content: "";
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--color-muted);
+  }
+
+  &[data-status="pending_payment"]::before {
+    background: var(--color-gold);
+  }
+
+  &[data-status="paid"]::before {
+    background: var(--chart-1);
+  }
+
+  &[data-status="delivering"]::before {
+    background: var(--color-text);
+  }
+}
+
+// ── Category bars: one hue, value at the end ────────────────
+.bars {
+  display: grid;
+  gap: var(--space-4);
+
+  li {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    row-gap: var(--space-2);
+  }
+}
+
+.barLabel {
+  @include text(sm);
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+.barValue {
+  @include text(sm);
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+
+  span {
+    margin-left: var(--space-1);
+    font-weight: 400;
+    color: var(--color-muted);
+  }
+}
+
+.barTrack {
+  grid-column: 1 / -1;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--chart-grid);
+  overflow: hidden;
+}
+
+.barFill {
+  display: block;
+  height: 100%;
+  border-radius: var(--radius-pill);
+  background: var(--chart-1);
+}
+
+// ── Split bars (part-to-whole) ──────────────────────────────
+.split {
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.splitCaption {
+  @include text(sm);
+  font-weight: 600;
+}
+
+// Segments separated by a 2px surface gap (dataviz spacer), rounded ends on the bar.
+.splitBar {
+  display: flex;
+  gap: 2px;
+  height: 12px;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+}
+
+.splitSeg {
+  flex-basis: 0;
+  min-width: 4px;
+}
+
+.splitSeg,
+.swatch {
+  &[data-slot="1"] {
+    background: var(--chart-1);
+  }
+
+  &[data-slot="2"] {
+    background: var(--chart-2);
+  }
+
+  &[data-slot="3"] {
+    background: var(--chart-3);
+  }
+}
+
+.splitLegend {
+  display: grid;
+  gap: var(--space-2);
+
+  li {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto auto;
+    align-items: center;
+    gap: var(--space-2);
+    @include text(sm);
+    white-space: nowrap;
+  }
+
+  strong {
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.swatch {
+  width: 10px;
+  height: 10px;
+  border-radius: 3px;
+}
+
+.splitName {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+// ── Activity ────────────────────────────────────────────────
+.activityIcon {
+  display: grid;
+  flex-shrink: 0;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-alt);
+  color: var(--color-muted);
+
+  &[data-kind="payment"] {
+    color: var(--color-success-text);
+  }
+}

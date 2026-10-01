@@ -1,0 +1,103 @@
+@use "abstracts" as *;
+
+.page {
+  display: grid;
+  gap: var(--space-5);
+}
+
+// ── Header: title left, period tabs right ───────────────────
+.header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-5);
+  padding-bottom: var(--space-2);
+}
+
+.eyebrow {
+  @include eyebrow;
+  font-weight: 600;
+}
+
+.title {
+  @include heading(2xl);
+  font-size: 2.5rem;
+  line-height: 1.1;
+}
+
+.period {
+  margin-top: var(--space-1);
+  @include text(sm);
+  color: var(--color-muted);
+}
+
+.ranges {
+  display: inline-flex;
+  flex-shrink: 0;
+  padding: var(--space-1);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+}
+
+.range {
+  display: inline-flex;
+  align-items: center;
+  min-height: 36px;
+  padding-inline: var(--space-4);
+  border-radius: calc(var(--radius-sm) - 4px);
+  @include text(sm);
+  font-weight: 500;
+  color: var(--color-muted);
+  white-space: nowrap;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+
+  @media (hover: hover) {
+    &:hover {
+      color: var(--color-text);
+    }
+  }
+
+  &[aria-current="page"] {
+    background: var(--color-accent);
+    color: var(--color-accent-contrast);
+  }
+}
+
+// ── KPI row: five equal tiles ───────────────────────────────
+.kpis {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: var(--space-4);
+}
+
+.notice {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius-sm);
+  background: color-mix(in srgb, var(--color-gold) 14%, var(--color-surface));
+  @include text(sm);
+  color: var(--color-gold-text);
+}
+
+// ── Panels: 12-column grid (8 + 4, then three 4s) ───────────
+.grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.span8 {
+  grid-column: span 8;
+}
+
+.span4 {
+  grid-column: span 4;
+}
+
+.splits {
+  display: grid;
+  gap: var(--space-6);
+}
