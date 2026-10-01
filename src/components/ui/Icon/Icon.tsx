@@ -94,6 +94,12 @@ const paths = {
       <path d="M15 7.5h5.5V13" />
     </>
   ),
+  trendDown: (
+    <>
+      <path d="m3.5 7 6 6 4-4 7 7.5" />
+      <path d="M15 16.5h5.5V11" />
+    </>
+  ),
   mail: (
     <>
       <rect x="3.5" y="5.5" width="17" height="13" rx="1.5" />

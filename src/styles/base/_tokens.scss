@@ -28,6 +28,16 @@
 
   --color-overlay: rgb(17 24 39 / 0.5);
 
+  // Charts (admin). Categorical order is fixed; validated with the dataviz palette script on #ffffff:
+  // lightness band, chroma floor, CVD ΔE ≥ 10.9, normal-vision ΔE ≥ 17.7, all ≥ 3:1 contrast.
+  --chart-1: #3a5bc7; // cobalt: revenue / first series
+  --chart-2: #b98a1c; // gold: profit / second series
+  --chart-3: #1b9e82; // turquoise: third series
+  --chart-grid: #eef0f3; // hairline gridlines, one step off the surface
+  // Small text for up/down changes: darker than the fill colours so they pass 4.5:1 on white.
+  --color-success-text: #15803d;
+  --color-sale-text: #b91c1c;
+
   // Gradients. Accent is sized 200% so hovers can slide it; sheen is the soft light of surfaces.
   --gradient-accent: linear-gradient(
     120deg,
