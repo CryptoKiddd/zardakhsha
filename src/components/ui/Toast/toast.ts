@@ -17,6 +17,8 @@ export type ToastOptions = {
 export type ToastItem = ToastOptions & { id: string; tone: ToastTone; message: string; createdAt: number };
 
 const MAX_VISIBLE = 3;
+/** One shared empty list: useSyncExternalStore needs the server snapshot to be the same object every call. */
+const NONE: ToastItem[] = [];
 let items: ToastItem[] = [];
 const listeners = new Set<() => void>();
 let seq = 0;
@@ -51,5 +53,5 @@ export const toastStore = {
     };
   },
   get: () => items,
-  getServer: (): ToastItem[] => [],
+  getServer: () => NONE,
 };
